@@ -172,11 +172,11 @@
             <p>&copy; 2026 DELTA HUB. Diseñado para la comunidad de Roblox.</p>
         </footer>
     </div>
-    <!-- SE TRASLADÓ LA CARGA DE SUPABASE A UN MÓDULO ASÍNCRONO CON CAPTURA DE MENSAJES -->
+    <!-- SE TRASLADÓ LA CARGA DE SUPABASE A UN MÓDULO ASÍNCRONO CON MAPEO CORREGIDO -->
     <script type="module">
         import { createClient } from 'https://jsdelivr.net';
 
-        const SUPABASE_URL = "https://supabase.co";
+        const SUPABASE_URL = "https://euxolslvpqsornicoeop.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
         
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -206,7 +206,7 @@
                 if (error) return `Error base de datos: ${error.message}`;
                 if (!data || data.length === 0) return "Llave incorrecta o no registrada.";
 
-                // Tomamos el primer registro encontrado
+                // CORRECCIÓN CLAVE: Se extrae la fecha desde el objeto de la primera fila [0]
                 const fechaCreacion = new Date(data[0].creado_en).getTime();
                 const ahora = new Date().getTime();
                 const veinticuatroHoras = 24 * 60 * 60 * 1000;
@@ -215,9 +215,9 @@
                     return "Esta llave ya expiró tras cumplirse las 24h.";
                 }
 
-                return true; // Acceso concedido exitosamente
+                return true; // Acceso concedido
             } catch (err) {
-                return `Fallo de conexión: ${err.message || 'Verifica RLS o internet'}`;
+                return `Fallo de proceso interno: ${err.message}`;
             }
         }
 
@@ -229,8 +229,7 @@
             errorElemento.style.display = 'none';
 
             if (!llaveIngresada) {
-                errorElemento.textContent = "Por favor, introduce una llave.";
-                errorElemento.style.display = 'block';
+                alert("Por favor, introduce una llave antes de verificar.");
                 return;
             }
 
@@ -244,6 +243,8 @@
                 document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
                 document.getElementById('contenido-protegido').style.display = 'block';
             } else {
+                // Alerta nativa que desbloquea el botón y notifica el error exacto
+                alert(resultado);
                 errorElemento.textContent = resultado;
                 errorElemento.style.display = 'block';
                 localStorage.removeItem('delta_hub_token');
@@ -253,7 +254,6 @@
             this.disabled = false;
         };
 
-        // Ejecutar de inmediato de fondo
         verificarAcceso();
     </script>
 </body>
