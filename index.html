@@ -4,34 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delta Scripts Roblox</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        .container {
-            background-color: #1e1e1e;
-            padding: 30px;
-            border-radius: 10px;
-            display: inline-block;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
-        }
-        h1 { color: #00ff88; }
-    </style>
+    <!-- Vinculamos tu archivo style.css de forma limpia -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
         <h1>Delta Scripts Hub</h1>
-        <p>Tu página web está conectada exitosamente a Firebase.</p>
+        <p>Tu catálogo de scripts para Roblox.</p>
+        <div class="status" id="db-status">Conectando a Firebase...</div>
     </div>
 
-    <!-- CONFIGURACIÓN OFICIAL DE GOOGLE FIREBASE -->
+    <!-- CONFIGURACIÓN DE GOOGLE FIREBASE -->
     <script type="module">
-        // Importamos las librerías web oficiales directamente de Google
+        // Importamos las librerías oficiales desde los servidores de Google
         import { initializeApp } from "https://gstatic.com";
         import { getFirestore } from "https://gstatic.com";
 
@@ -46,10 +32,12 @@
             measurementId: "G-90E1DSBCWY"
         };
 
-        // Inicializar Firebase en tu web
+        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Cambiamos el texto de la pantalla para confirmar que funcionó
+        document.getElementById('db-status').innerText = "¡Firebase conectado con éxito!";
         console.log("¡Firebase conectado con éxito en deltascripts-1!");
     </script>
 
