@@ -4,67 +4,182 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Sitio Web Profesional</title>
-    <!-- Importamos una tipografía elegante y moderna de Google Fonts -->
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Conectamos nuestro archivo de estilos CSS -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* Estilos profesionales para la pantalla de bloqueo */
+        #pantalla-bloqueo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #ffffff;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .bloqueo-card {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid #334155;
+        }
+        .bloqueo-card h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: #f8fafc;
+        }
+        .bloqueo-card p {
+            color: #94a3b8;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+        .btn-discord {
+            background: #5865F2;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-discord:hover {
+            background: #4752C4;
+        }
+    </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">PROSÍTIO</div>
-        <nav>
-            <a href="#">Inicio</a>
-            <a href="#proyectos">Proyectos</a>
-            <a href="#">Contacto</a>
-        </nav>
-    </header>
-
-    <main class="hero">
-        <div class="hero-content">
-            <h1>Diseño digital con enfoque profesional.</h1>
-            <p>Creamos experiencias web rápidas, estéticas y optimizadas para el mundo moderno.</p>
-            <a href="#proyectos" class="btn-primary">Ver mi trabajo</a>
+    <!-- PANTALLA DE BLOQUEO (Se muestra por defecto) -->
+    <div id="pantalla-bloqueo">
+        <div class="bloqueo-card">
+            <h2>🔒 Acceso Restringido</h2>
+            <p>Para ingresar a este sitio profesional, debes verificar tu cuenta con Discord. Tu llave de acceso será válida por 24 horas.</p>
+            <button id="btn-discord" class="btn-discord">Verificar con Discord</button>
         </div>
-    </main>
+    </div>
 
-    <!-- SECCIÓN DE PROYECTOS -->
-    <section id="proyectos" class="projects-section">
-        <h2>Proyectos Destacados</h2>
-        <div class="projects-grid">
-            
-            <!-- Tarjeta 1 -->
-            <div class="project-card">
-                <div class="card-icon">🌐</div>
-                <h3>E-Commerce Premium</h3>
-                <p>Tienda en línea de alta velocidad con pasarela de pagos integrada y diseño minimalista.</p>
-                <a href="#" class="card-link">Explorar proyecto &rarr;</a>
+    <!-- CONTENIDO PROTEGIDO (Oculto hasta que se verifique) -->
+    <div id="contenido-protegido" style="display: none;">
+        <header>
+            <div class="logo">PROSÍTIO</div>
+            <nav>
+                <a href="#">Inicio</a>
+                <a href="#proyectos">Proyectos</a>
+                <a href="#">Contacto</a>
+            </nav>
+        </header>
+
+        <main class="hero">
+            <div class="hero-content">
+                <h1>Diseño digital con enfoque profesional.</h1>
+                <p>Creamos experiencias web rápidas, estéticas y optimizadas para el mundo moderno.</p>
+                <a href="#proyectos" class="btn-primary">Ver mi trabajo</a>
             </div>
+        </main>
 
-            <!-- Tarjeta 2 -->
-            <div class="project-card">
-                <div class="card-icon">📱</div>
-                <h3>App Móvil de Gestión</h3>
-                <p>Interfaz intuitiva para iOS y Android enfocada en la productividad y experiencia de usuario.</p>
-                <a href="#" class="card-link">Explorar proyecto &rarr;</a>
+        <section id="proyectos" class="projects-section">
+            <h2>Proyectos Destacados</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="card-icon">🌐</div>
+                    <h3>E-Commerce Premium</h3>
+                    <p>Tienda en línea de alta velocidad con pasarela de pagos integrada y diseño minimalista.</p>
+                    <a href="#" class="card-link">Explorar proyecto &rarr;</a>
+                </div>
+                <div class="project-card">
+                    <div class="card-icon">📱</div>
+                    <h3>App Móvil de Gestión</h3>
+                    <p>Interfaz intuitiva para iOS y Android enfocada en la productividad y experiencia de usuario.</p>
+                    <a href="#" class="card-link">Explorar proyecto &rarr;</a>
+                </div>
+                <div class="project-card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Optimización SEO y Web</h3>
+                    <p>Estrategia de optimización que logró reducir el tiempo de carga a menos de 1 segundo.</p>
+                    <a href="#" class="card-link">Explorar proyecto &rarr;</a>
+                </div>
             </div>
+        </section>
 
-            <!-- Tarjeta 3 -->
-            <div class="project-card">
-                <div class="card-icon">⚡</div>
-                <h3>Optimización SEO y Web</h3>
-                <p>Estrategia de optimización que logró reducir el tiempo de carga a menos de 1 segundo.</p>
-                <a href="#" class="card-link">Explorar proyecto &rarr;</a>
-            </div>
+        <footer>
+            <p>&copy; 2026 PROSÍTIO. Construido paso a paso.</p>
+        </footer>
+    </div>
 
-        </div>
-    </section>
+    <!-- LÓGICA DE VERIFICACIÓN Y TIEMPO (24 HORAS) -->
+    <script>
+        // Tu Client ID ya configurado correctamente
+        const DISCORD_CLIENT_ID = '1517707106491306165'; 
+        
+        const REDIRECT_URI = window.location.origin + window.location.pathname;
 
-    <footer>
-        <p>&copy; 2026 PROSÍTIO. Construido paso a paso.</p>
-    </footer>
+        function verificarAcceso() {
+            const horaAcceso = localStorage.getItem('llave_discord_tiempo');
+            const ahora = new Date().getTime();
+            const veinticuatroHoras = 24 * 60 * 60 * 1000; // Milisegundos en un día
 
+            // Si la llave existe y no ha expirado
+            if (horaAcceso && (ahora - horaAcceso < veinticuatroHoras)) {
+                document.getElementById('pantalla-bloqueo').style.display = 'none';
+                document.getElementById('contenido-protegido').style.display = 'block';
+            } else {
+                // Si ya expiró el tiempo, borramos los registros viejos
+                localStorage.removeItem('llave_discord_tiempo');
+                localStorage.removeItem('discord_access_token');
+            }
+        }
+
+        // Procesar la respuesta cuando regresan de Discord
+        function procesarRetornoDiscord() {
+            const fragmento = window.location.hash;
+            if (fragmento) {
+                const parametros = new URLSearchParams(fragmento.substring(1));
+                const accessToken = parametros.get('access_token');
+
+                if (accessToken) {
+                    // Guardamos el token y la hora actual como "llave" de entrada
+                    localStorage.setItem('discord_access_token', accessToken);
+                    localStorage.setItem('llave_discord_tiempo', new Date().getTime());
+                    
+                    // Limpiamos la URL para que se vea limpia y profesional sin los códigos raros
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    
+                    // Validamos el acceso para mostrar la página
+                    verificarAcceso();
+                }
+            }
+        }
+
+        // Ejecutar al cargar la página
+        window.onload = function() {
+            procesarRetornoDiscord();
+            verificarAcceso();
+        };
+
+        // Evento del botón para ir a iniciar sesión a Discord
+        document.getElementById('btn-discord').onclick = function() {
+            const urlDiscord = `https://discord.com{DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
+            window.location.href = urlDiscord;
+        };
+    </script>
 </body>
 </html>
