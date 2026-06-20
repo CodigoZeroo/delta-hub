@@ -86,9 +86,8 @@ header nav a:hover::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10rem 10% 6rem 10%; 
+    padding: 12rem 10% 8rem 10%; 
     margin-top: 40px;
-    /* Fondo con doble degradado para crear un efecto de luces de neón profundas */
     background: 
         radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.15), transparent 50%),
         radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1), transparent 50%),
@@ -97,7 +96,6 @@ header nav a:hover::after {
     overflow: hidden;
 }
 
-/* Un destello de luz extra detrás del texto */
 .hero::before {
     content: '';
     position: absolute;
@@ -115,27 +113,26 @@ header nav a:hover::after {
 .hero-content {
     text-align: center;
     max-width: 800px;
-    z-index: 2; /* Por encima de las luces de fondo */
+    z-index: 2;
 }
 
 .hero-content h1 {
-    font-size: 3.8rem; /* Más grande y llamativo */
+    font-size: 3.5rem; 
     font-weight: 800;
     line-height: 1.15;
     margin-bottom: 1.8rem;
     letter-spacing: -1px;
-    /* Degradado de tres colores de texto ultra moderno */
     background: linear-gradient(to right, #ffffff 30%, #38bdf8, #06b6d4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .hero-content p {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: #94a3b8;
     margin-bottom: 3rem;
     line-height: 1.7;
-    max-width: 600px;
+    max-width: 650px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -145,7 +142,7 @@ header nav a:hover::after {
    ========================================================================== */
 .btn-primary {
     display: inline-block;
-    background: linear-gradient(135deg, #38bdf8, #06b6d4); /* Botón con degradado */
+    background: linear-gradient(135deg, #38bdf8, #06b6d4); 
     color: #0f172a;
     padding: 1rem 2.5rem;
     border-radius: 50px;
@@ -157,35 +154,29 @@ header nav a:hover::after {
 }
 
 .btn-primary:hover {
-    transform: translateY(-4px); /* Se eleva un poco más */
-    box-shadow: 0 12px 30px rgba(56, 189, 248, 0.6); /* El brillo se expande */
-    filter: brightness(1.1); /* Se ilumina ligeramente */
-}
-
-.btn-primary:active {
-    transform: translateY(-1px);
+    transform: translateY(-4px); 
+    box-shadow: 0 12px 30px rgba(56, 189, 248, 0.6); 
+    filter: brightness(1.1); 
 }
 /* ==========================================================================
-   5. SECCIÓN DE PROYECTOS - REDISEÑO PREMIUM FUTURISTA
+   5. SECCIÓN DE SCRIPTS (TARJETAS DE ROBLOX)
    ========================================================================== */
 .projects-section {
-    padding: 8rem 10%;
-    background-color: #0b1329; /* Tono muy oscuro para crear contraste artificial */
+    padding: 6rem 10%;
+    background-color: #0b1329; 
     text-align: center;
     border-top: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 .projects-section h2 {
-    font-size: 2.6rem;
+    font-size: 2.5rem;
     font-weight: 800;
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
     position: relative;
     display: inline-block;
     color: #f8fafc;
-    letter-spacing: -0.5px;
 }
 
-/* Línea brillante debajo del título de la sección */
 .projects-section h2::after {
     content: '';
     position: absolute;
@@ -197,34 +188,30 @@ header nav a:hover::after {
     border-radius: 10px;
 }
 
-/* Contenedor adaptativo */
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2.5rem;
 }
 
-/* Estilo avanzado para cada Tarjeta */
 .project-card {
-    background: rgba(30, 41, 59, 0.4); /* Fondo semi-transparente elegante */
+    background: rgba(30, 41, 59, 0.4); 
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     padding: 3rem 2.2rem;
-    border-radius: 20px; /* Bordes más curvos y modernos */
+    border-radius: 20px; 
     text-align: left;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    position: relative;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .project-card:hover {
-    transform: translateY(-12px); /* Se eleva de forma muy suave */
-    border-color: rgba(56, 189, 248, 0.4); /* El borde se enciende con luz de neón */
+    transform: translateY(-12px); 
+    border-color: rgba(56, 189, 248, 0.4); 
     background: rgba(30, 41, 59, 0.7);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.1);
 }
 
-/* Iconos de las tarjetas con animación de salto */
 .card-icon {
     font-size: 2.8rem;
     margin-bottom: 1.8rem;
@@ -233,7 +220,7 @@ header nav a:hover::after {
 }
 
 .project-card:hover .card-icon {
-    transform: translateY(-5px) scale(1.1); /* El icono salta un poco al pasar el mouse */
+    transform: translateY(-5px) scale(1.1); 
 }
 
 .project-card h3 {
@@ -259,17 +246,114 @@ header nav a:hover::after {
     transition: all 0.3s ease;
 }
 
-.card-link:hover {
+.project-card:hover .card-link {
+    transform: translateX(5px);
     color: #06b6d4;
 }
 
-/* Pequeña animación de desplazamiento en la flecha del enlace */
-.project-card:hover .card-link {
-    transform: translateX(5px);
+/* ==========================================================================
+   6. SECCIÓN DE ACTUALIZACIONES (ESTADO DE DELTA EXECUTOR)
+   ========================================================================== */
+.updates-section {
+    padding: 6rem 10%;
+    background-color: #0f172a;
+    text-align: center;
+}
+
+.updates-section h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: #f8fafc;
+}
+
+.updates-intro {
+    color: #94a3b8;
+    margin-bottom: 4rem;
+    font-size: 1.1rem;
+}
+
+.status-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.status-box {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    flex: 1;
+    min-width: 280px;
+    text-align: left;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.status-box:hover {
+    transform: translateY(-5px);
+}
+
+.status-box h4 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #f8fafc;
+}
+
+/* Etiquetas e iluminación de estado */
+.badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+}
+
+.status-box.online {
+    border-left: 4px solid #22c55e; /* Borde verde */
+}
+
+.status-box.online:hover {
+    box-shadow: 0 10px 30px rgba(34, 197, 94, 0.1);
+}
+
+.badge-online {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.status-box.warning {
+    border-left: 4px solid #eab308; /* Borde amarillo */
+}
+
+.status-box.warning:hover {
+    box-shadow: 0 10px 30px rgba(234, 179, 8, 0.1);
+}
+
+.badge-warning {
+    background-color: rgba(234, 179, 8, 0.15);
+    color: #facc15;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.version-text {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.version-text strong {
+    color: #f8fafc;
 }
 
 /* ==========================================================================
-   6. PIE DE PÁGINA
+   7. PIE DE PÁGINA
    ========================================================================== */
 footer {
     text-align: center;
@@ -281,7 +365,7 @@ footer {
 }
 
 /* ==========================================================================
-   7. PANTALLA DE BLOQUEO (SISTEMA DE LLAVE MANUAL)
+   8. PANTALLA DE BLOQUEO (SISTEMA DE LLAVE MANUAL)
    ========================================================================== */
 #pantalla-bloqueo {
     position: fixed;
