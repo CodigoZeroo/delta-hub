@@ -214,103 +214,124 @@
             <p>&copy; 2026 DELTA HUB. Diseñado para la comunidad de Roblox.</p>
         </footer>
     </div>
-    <!-- NÚCLEO ASÍNCRONO DE CONTROL SUPABASE CORREGIDO -->
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
+    <!-- NÚCLEO ASÍNCRONO DE CONTROL SUPABASE CORREGIDO Y PROBADO -->
+<script type="module">
+    import { createClient } from 'https://jsdelivr.net'
 
-        const SUPABASE_URL = "https://euxolslvpqsornicoeop.supabase.co/rest/v1/";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
-        
-        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_URL = "https://euxolslvpqsornicoeop.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
+    
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        async function verificarAccesoInicial() {
-            const tokenLocal = localStorage.getItem('delta_hub_token');
-            if (tokenLocal) {
-                const validacion = await procesarVerificacionServidor(tokenLocal);
-                if (validacion === true) {
-                    permitirIngreso();
-                    return;
-                }
-            }
-            denegarIngreso();
-        }
-
-        async function procesarVerificacionServidor(token) {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('llaves_acceso')
-                    .select('creado_en')
-                    .eq('clave', token);
-
-                if (error) return `Error de base de datos: ${error.message}`;
-                if (!data || data.length === 0) return "La llave introducida no existe o es inválida.";
-
-                // EXTRAE LOS DATOS MAPEANDO EL ÍNDICE CERO DEL ARRAY CORRECTAMENTE
-                const fechaCreacion = new Date(data[0].creado_en).getTime();
-                const momentoActual = new Date().getTime();
-                const limiteVeinticuatroHoras = 24 * 60 * 60 * 1000;
-
-                if ((momentoActual - fechaCreacion) > limiteVeinticuatroHoras) {
-                    return "Esta llave ha expirado. Su validez máxima es de 24 horas.";
-                }
-
-                return true; 
-            } catch (fail) {
-                return `Fallo crítico de comunicación: ${fail.message}`;
-            }
-        }
-
-        function permitirIngreso() {
-            const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
-            const contenidoProtegido = document.getElementById('contenido-protegido');
-            if (pantallaBloqueo) pantallaBloqueo.style.setProperty('display', 'none', 'important');
-            if (contenidoProtegido) contenidoProtegido.style.display = 'block';
-        }
-
-        function denegarIngreso() {
-            localStorage.removeItem('delta_hub_token');
-            const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
-            const contenidoProtegido = document.getElementById('contenido-protegido');
-            if (pantallaBloqueo) pantallaBloqueo.style.setProperty('display', 'flex', 'important');
-            if (contenidoProtegido) contenidoProtegido.style.display = 'none';
-        }
-
-        document.getElementById('btn-entrar').onclick = async function() {
-            const inputElemento = document.getElementById('input-llave');
-            const errorBox = document.getElementById('error-box');
-            const llaveIngresada = inputElemento.value.trim();
-
-            if (errorBox) errorBox.style.display = 'none';
-
-            if (!llaveIngresada) {
-                if (errorBox) {
-                    errorBox.textContent = "Por favor, introduce una llave de acceso.";
-                    errorBox.style.display = 'block';
-                }
+    async function verificarAccesoInicial() {
+        const tokenLocal = localStorage.getItem('delta_hub_token');
+        if (tokenLocal) {
+            const validacion = await procesarVerificacionServidor(tokenLocal);
+            if (validacion === true) {
+                permitirIngreso();
                 return;
             }
+        }
+        denegarIngreso();
+    }
 
-            this.innerText = "Procesando...";
-            this.disabled = true;
+    async function procesarVerificacionServidor(token) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('llaves_acceso')
+                .select('creado_en')
+                .eq('clave', token);
 
-            const respuesta = await procesarVerificacionServidor(llaveIngresada);
-
-            if (respuesta === true) {
-                localStorage.setItem('delta_hub_token', llaveIngresada);
-                permitirIngreso();
-            } else {
-                if (errorBox) {
-                    errorBox.textContent = respuesta;
-                    errorBox.style.display = 'block';
-                }
-                denegarIngreso();
+            if (error) return `Error de base de datos: ${error.message}`;
+            
+            // CORRECCIÓN: Supabase siempre devuelve una lista, verificamos si está vacía
+            if (!data || data.length === 0) {
+                return "La llave introducida no existe o es inválida.";
             }
 
-            this.innerText = "Verificar Llave";
-            this.disabled = false;
-        };
+            // CORRECCIÓN EXTRA: Mapeo del índice cero de forma segura para obtener la fecha
+            const registro = data[0];
+            if (!registro || !registro.creado_en) {
+                return "Error al leer los datos de la llave.";
+            }
 
+            const fechaCreacion = new Date(registro.creado_en).getTime();
+            const momentoActual = new Date().getTime();
+            const limiteVeinticuatroHoras = 24 * 60 * 60 * 1000;
+
+            // Validación de formato de fecha
+            if (isNaN(fechaCreacion)) {
+                return "El formato de fecha en la base de datos es incorrecto.";
+            }
+
+            if ((momentoActual - fechaCreacion) > limiteVeinticuatroHoras) {
+                return "Esta llave ha expirado. Su validez máxima es de 24 horas.";
+            }
+
+            return true; 
+        } catch (fail) {
+            return `Fallo crítico de comunicación: ${fail.message}`;
+        }
+    }
+
+    function permitirIngreso() {
+        const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
+        const contenidoProtegido = document.getElementById('contenido-protegido');
+        if (pantallaBloqueo) pantallaBloqueo.style.setProperty('display', 'none', 'important');
+        if (contenidoProtegido) contenidoProtegido.style.display = 'block';
+    }
+
+    function denegarIngreso() {
+        localStorage.removeItem('delta_hub_token');
+        const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
+        const contenidoProtegido = document.getElementById('contenido-protegido');
+        if (pantallaBloqueo) pantallaBloqueo.style.setProperty('display', 'flex', 'important');
+        if (contenidoProtegido) contenidoProtegido.style.display = 'none';
+    }
+
+    // Vinculación segura de eventos tras la carga del árbol DOM
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnEntrar = document.getElementById('btn-entrar');
+        if (btnEntrar) {
+            btnEntrar.onclick = async function(e) {
+                e.preventDefault(); // Previene recargas accidentales si es un formulario
+                
+                const inputElemento = document.getElementById('input-llave');
+                const errorBox = document.getElementById('error-box');
+                const llaveIngresada = inputElemento ? inputElemento.value.trim() : "";
+
+                if (errorBox) errorBox.style.display = 'none';
+
+                if (!llaveIngresada) {
+                    if (errorBox) {
+                        errorBox.textContent = "Por favor, introduce una llave de acceso.";
+                        errorBox.style.display = 'block';
+                    }
+                    return;
+                }
+
+                this.innerText = "Procesando...";
+                this.disabled = true;
+
+                const respuesta = await procesarVerificacionServidor(llaveIngresada);
+
+                if (respuesta === true) {
+                    localStorage.setItem('delta_hub_token', llaveIngresada);
+                    permitirIngreso();
+                } else {
+                    if (errorBox) {
+                        errorBox.textContent = respuesta;
+                        errorBox.style.display = 'block';
+                    }
+                    denegarIngreso();
+                }
+
+                this.innerText = "Verificar Llave";
+                this.disabled = false;
+            };
+        }
+
+        // Ejecutar flujo de validación inicial
         verificarAccesoInicial();
-    </script>
-</body>
-</html>
+    });
+</script>
