@@ -9,7 +9,7 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
-    <!-- ESTILOS DE CONTROL INMEDIATO PARA EVITAR PANTALLA EN NEGRO -->
+    <!-- ESTILOS INTEGRADOS: Carga instantánea sin depender de archivos externos -->
     <style>
         #pantalla-bloqueo {
             position: fixed;
@@ -17,36 +17,34 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: radial-gradient(circle at 50% 50%, #1e293b, #0f172a);
-            display: flex !important;
+            background-color: #111827 !important; /* Fondo gris oscuro premium visible */
+            display: flex !important; /* Fuerza a mostrarse de inmediato */
             justify-content: center;
             align-items: center;
-            z-index: 99999;
+            z-index: 999999;
         }
 
         .bloqueo-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #1e293b !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2.5rem 2rem;
             border-radius: 24px;
             width: 90%;
             max-width: 420px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
         }
 
         .bloqueo-card h2 {
             font-size: 1.6rem;
             font-weight: 800;
             margin-bottom: 0.8rem;
-            color: #ffffff;
+            color: #ffffff !important;
         }
 
         .bloqueo-card p {
             font-size: 0.95rem;
-            color: #94a3b8;
+            color: #94a3b8 !important;
             line-height: 1.5;
             margin-bottom: 1.8rem;
         }
@@ -54,10 +52,10 @@
         .input-llave {
             width: 100%;
             padding: 0.9rem 1.2rem;
-            background: #0f172a;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #0f172a !important;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
-            color: #ffffff;
+            color: #ffffff !important;
             font-weight: 700;
             font-size: 1rem;
             text-align: center;
@@ -67,8 +65,8 @@
 
         .btn-entrar {
             width: 100%;
-            background: linear-gradient(135deg, #38bdf8, #06b6d4);
-            color: #0f172a;
+            background: linear-gradient(135deg, #38bdf8, #06b6d4) !important;
+            color: #0f172a !important;
             border: none;
             padding: 0.9rem;
             border-radius: 12px;
@@ -79,14 +77,14 @@
         }
 
         .btn-entrar:disabled {
-            background: #475569;
-            color: #94a3b8;
+            background: #475569 !important;
+            color: #94a3b8 !important;
             cursor: not-allowed;
         }
 
         .btn-obtener {
             display: inline-block;
-            color: #94a3b8;
+            color: #38bdf8 !important;
             text-decoration: none;
             font-size: 0.88rem;
             font-weight: 600;
@@ -175,18 +173,31 @@
     <!-- CDN DE LIBRERÍA DE SUPABASE -->
     <script src="https://jsdelivr.net"></script>
 
-    <!-- CONTROL SECURE DE LLAVES DINÁMICAS -->
+    <!-- CONTROL SECURE CON ARRANQUE INMEDIATO -->
     <script>
         const SUPABASE_URL = "https://supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
         
-        // CORRECCIÓN CLAVE: Uso de 'Supabase' con S mayúscula obligatorio para CDN
-        const supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let supabaseClient;
+
+        // Arranca la verificación en cuanto el HTML básico esté listo en pantalla
+        document.addEventListener("DOMContentLoaded", function() {
+            try {
+                if (typeof Supabase !== 'undefined') {
+                    supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    verificarAcceso();
+                } else {
+                    console.error("La librería de Supabase no cargó correctamente.");
+                }
+            } catch (e) {
+                console.error("Error inicializando la app:", e);
+            }
+        });
 
         async function verificarAcceso() {
             const tokenGuardado = localStorage.getItem('delta_hub_token');
             
-            if (tokenGuardado) {
+            if (tokenGuardado && supabaseClient) {
                 const esValida = await validarLlaveServidor(tokenGuardado);
                 if (esValida) {
                     document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
@@ -201,6 +212,7 @@
         }
 
         async function validarLlaveServidor(token) {
+            if (!supabaseClient) return false;
             try {
                 const { data, error } = await supabaseClient
                     .from('llaves_acceso')
@@ -216,7 +228,7 @@
 
                 return (ahora - fechaCreacion) < veinticuatroHoras;
             } catch (err) {
-                console.error("Error en comunicación con base de datos:", err);
+                console.error("Error al consultar Supabase:", err);
                 return false;
             }
         }
@@ -251,10 +263,6 @@
 
             this.innerText = "Verificar Llave";
             this.disabled = false;
-        };
-
-        window.onload = function() {
-            verificarAcceso();
         };
     </script>
 </body>
