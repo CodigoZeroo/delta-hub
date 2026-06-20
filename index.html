@@ -5,6 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delta Scripts Roblox</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos rápidos para las tarjetas de tus scripts */
+        .script-card {
+            background: #161622; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            text-align: left; 
+            border: 1px solid #2a2a3a;
+        }
+        .script-title {
+            color: #00ff88; 
+            margin: 0 0 10px 0; 
+            font-size: 1.3rem;
+        }
+        .script-box {
+            background: #000; 
+            color: #00ff88; 
+            padding: 15px; 
+            border-radius: 6px; 
+            overflow-x: auto; 
+            font-family: monospace; 
+            border: 1px solid #111;
+            white-space: pre-wrap;
+        }
+        .btn-copy {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-copy:hover {
+            background: #00cc6a;
+        }
+    </style>
 </head>
 <body>
 
@@ -12,61 +51,28 @@
         <h1>Delta Scripts Hub</h1>
         <p>Tu catálogo de scripts para Roblox.</p>
         
-        <!-- Zona de carga dinámica -->
-        <div id="contenedor-principal">
-            <div class="status" id="db-status">Conectando con el servidor seguro...</div>
+        <!-- Tarjeta del Script 1 (Puedes cambiar este texto por tus scripts reales) -->
+        <div class="script-card">
+            <h3 class="script-title">🚀 Delta Executor Auto-Farm</h3>
+            <div class="script-box" id="script1">loadstring(game:HttpGet("https://githubusercontent.com"))()</div>
+            <button class="btn-copy" onclick="copiarScript('script1')">Copiar Script</button>
+        </div>
+
+        <!-- Tarjeta del Script 2 -->
+        <div class="script-card">
+            <h3 class="script-title">🛡️ Fly & Noclip Hack</h3>
+            <div class="script-box" id="script2">loadstring(game:HttpGet("https://githubusercontent.com"))()</div>
+            <button class="btn-copy" onclick="copiarScript('script2')">Copiar Script</button>
         </div>
     </div>
 
     <script>
-        // Sistema de conexión directa mediante API sin usar librerías externas de Google
-        const PROJECT_ID = "deltascripts-1";
-        const statusElemento = document.getElementById('db-status');
-        const contenedor = document.getElementById('contenedor-principal');
-
-        async function cargarScriptsDirecto() {
-            try {
-                // Hacemos una petición directa a la API de tu base de datos de Firebase
-                const url = `https://googleapis.com{PROJECT_ID}/databases/(default)/documents/scripts`;
-                const respuesta = await fetch(url);
-                
-                if (!respuesta.ok) {
-                    throw new Error("No se pudo obtener respuesta de la base de datos.");
-                }
-
-                const datos = await respuesta.json();
-
-                // Si la colección no tiene documentos guardados
-                if (!datos.documents || datos.documents.length === 0) {
-                    contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Conectado a Firebase, pero tu colección 'scripts' está vacía en el panel de Google.</div>";
-                    return;
-                }
-
-                // Limpiamos la pantalla y dibujamos tus scripts de Roblox
-                contenedor.innerHTML = "";
-                datos.documents.forEach((doc) => {
-                    const campos = doc.fields;
-                    // Extraemos las variables 'nombre' y 'contenido' que creaste en Firebase
-                    const nombreScript = campos.nombre && campos.nombre.stringValue ? campos.nombre.stringValue : 'Script sin nombre';
-                    const contenidoScript = campos.contenido && campos.contenido.stringValue ? campos.contenido.stringValue : '-- Vacío';
-
-                    contenedor.innerHTML += `
-                        <div style="background: #161622; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #2a2a3a;">
-                            <h3 style="color: #00ff88; margin: 0 0 10px 0; font-size: 1.3rem;">${nombreScript}</h3>
-                            <pre style="background: #000; color: #00ff88; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; border: 1px solid #111;"><code>${contenidoScript}</code></pre>
-                        </div>
-                    `;
-                });
-
-            } catch (error) {
-                statusElemento.style.background = "#331111";
-                statusElemento.style.color = "#ff4444";
-                statusElemento.innerText = "Error de conexión directa: " + error.message;
-            }
+        // Función rápida para que tus usuarios copien el script con un botón
+        function copiarScript(id) {
+            const codigo = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(codigo);
+            alert("¡Script copiado al portapapeles con éxito!");
         }
-
-        // Arrancar la descarga de inmediato
-        cargarScriptsDirecto();
     </script>
 
 </body>
