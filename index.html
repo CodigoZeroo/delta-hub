@@ -48,56 +48,205 @@
 
     <div class="container">
         <h1>Delta Scripts Hub</h1>
-        <p>Tu catálogo de scripts para Roblox.</p>
+        <p>Tu catálogo interactivo de scripts para Roblox.</p>
         
-        <div class="status" id="db-status">Cargando base de datos local...</div>
+        <!-- LOGIN Y REGISTRO DE USUARIOS -->
+        <div id="seccion-usuario" style="background: #1a1a24; padding: 15px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #333;">
+            <div id="form-auth">
+                <h3 style="margin-top:0; color:#00ff88;">🔑 Iniciar Sesión / Registrarse</h3>
+                <input type="email" id="auth-email" placeholder="Correo electrónico"><br>
+                <input type="password" id="auth-password" placeholder="Contraseña mínima de 6 caracteres"><br>
+                <button class="btn" onclick="registrarUsuario()">Crear Cuenta</button>
+                <button class="btn" onclick="iniciarSesion()" style="background:#00aeff;">Ingresar</button>
+            </div>
+            <div id="info-perfil" style="display: none;">
+                <p>Bienvenido, <span id="user-email" style="color:#00ff88; font-weight:bold;"></span></p>
+                <button class="btn" onclick="cerrarSesion()" style="background:#ff4444; color:#fff;">Cerrar Sesión</button>
+            </div>
+        </div>
+
+        <div class="status" id="db-status">Cargando plataforma...</div>
         <div id="contenedor-scripts"></div>
     </div>
 
+    <!-- LIBRERÍAS DE GOOGLE FIREBASE -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
     <script>
-        const statusElemento = document.getElementById('db-status');
-        const contenedor = document.getElementById('contenedor-scripts');
+        // Tus credenciales reales validadas de deltascripts-1
+        const firebaseConfig = {
+            apiKey: "AIzaSyCyxJWklgJAAMwmhSw9jF3CMsJXbF99CeA",
+            authDomain: "://firebaseapp.com",
+            projectId: "deltascripts-1",
+            storageBucket: "deltascripts-1.firebasestorage.app",
+            messagingSenderId: "735316669110",
+            appId: "1:735316669110:web:33f580d583a462ee2cac17",
+            measurementId: "G-90E1DSBCWY"
+        };
 
-        async function cargarScriptsLocales() {
-            try {
-                // Al leer un archivo propio del mismo repositorio, el navegador jamás lo bloquea
-                const respuesta = await fetch('lista.json');
-                if (!respuesta.ok) throw new Error("No se pudo leer el archivo lista.json");
-                
-                const datos = await respuesta.json();
+        // Inicializar servicios globales
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let usuarioActual = null;
+
+        // --- SISTEMA DE CONTROL DE USUARIO ---
+        auth.onAuthStateChanged(user => {
+            const formAuth = document.getElementById('form-auth');
+            const infoPerfil = document.getElementById('info-perfil');
+            
+            if (user) {
+                usuarioActual = user;
+                document.getElementById('user-email').innerText = user.email;
+                formAuth.style.display = "none";
+                infoPerfil.style.display = "block";
+            } else {
+                usuarioActual = null;
+                formAuth.style.display = "block";
+                infoPerfil.style.display = "none";
+            }
+            cargarCatalogosFirebase();
+        });
+
+        function registrarUsuario() {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-password').value;
+            auth.createUserWithEmailAndPassword(email, pass)
+                .then(() => alert("¡Cuenta creada exitosamente!"))
+                .catch(err => alert("Error al registrarse: " + err.message));
+        }
+
+        function iniciarSesion() {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-password').value;
+            auth.signInWithEmailAndPassword(email, pass)
+                .then(() => alert("¡Sesión iniciada con éxito!"))
+                .catch(err => alert("Datos incorrectos: " + err.message));
+        }
+
+        function cerrarSesion() {
+            auth.signOut();
+        }
+
+        // --- SISTEMA INTERACTIVO DE SCRIPTS ---
+        function cargarCatalogosFirebase() {
+            const statusElemento = document.getElementById('db-status');
+            const contenedor = document.getElementById('contenedor-scripts');
+            statusElemento.innerText = "Cargando base de datos...";
+
+            db.collection("scripts").get().then((respuesta) => {
+                if (respuesta.empty) {
+                    statusElemento.innerText = "Conexión estable con Firebase.";
+                    contenedor.innerHTML = "<div class='status' style='background:#332200; color:#ffaa00;'>Añade documentos en tu colección 'scripts' en tu panel de Google Firebase para mostrarlos.</div>";
+                    return;
+                }
 
                 statusElemento.style.display = "none";
                 contenedor.innerHTML = "";
 
-                let contador = 0;
-                datos.forEach((item) => {
-                    contador++;
-                    const idUnico = "script-code-" + contador;
+                respuesta.forEach((doc) => {
+                    const idDoc = doc.id;
+                    const item = doc.data();
+                    const nombre = item.nombre || "Script sin nombre";
+                    const contenido = item.contenido || "-- Vacío";
+                    const likes = item.likes || 0;
+                    const dislikes = item.dislikes || 0;
 
                     contenedor.innerHTML += `
                         <div class="script-card">
-                            <h3 class="script-title">🚀 ${item.nombre}</h3>
-                            <div class="script-box" id="${idUnico}">${item.contenido}</div>
-                            <button class="btn-copy" onclick="copiarScript('${idUnico}')">Copiar Script</button>
+                            <h3 class="script-title">🚀 ${nombre}</h3>
+                            <div class="script-box" id="code-${idDoc}">${contenido}</div>
+                            <button class="btn" onclick="copiarScript('code-${idDoc}')">Copiar Código</button>
+                            
+                            <div style="margin-top: 15px;">
+                                <button class="btn btn-like" onclick="reaccionar('${idDoc}', 'likes')">👍 <span id="likes-${idDoc}">${likes}</span></button>
+                                <button class="btn btn-dislike" onclick="reaccionar('${idDoc}', 'dislikes')">👎 <span id="dislikes-${idDoc}">${dislikes}</span></button>
+                            </div>
+
+                            <div class="comentarios-box">
+                                <h4 style="margin: 0 0 10px 0; color: #a0a0b5;">💬 Comentarios</h4>
+                                <div id="lista-comentarios-${idDoc}" style="max-height: 150px; overflow-y: auto; text-align: left; margin-bottom: 10px;">
+                                    <p style="font-size:0.8rem; color:#666;">Cargando opiniones...</p>
+                                </div>
+                                <input type="text" id="input-comentario-${idDoc}" placeholder="Escribe un comentario público..." style="width:70%; font-size:0.85rem;">
+                                <button class="btn" onclick="subirComentario('${idDoc}')" style="padding: 7px 12px; font-size:0.85rem;">Enviar</button>
+                            </div>
                         </div>
                     `;
+                    vincularComentariosTiempoReal(idDoc);
                 });
-
-            } catch (error) {
-                statusElemento.style.background = "#331111";
-                statusElemento.style.color = "#ff4444";
-                statusElemento.innerText = "Error: " + error.message;
-            }
+            }).catch(err => {
+                statusElemento.innerText = "Error al leer base de datos: " + err.message;
+            });
         }
 
-        cargarScriptsLocales();
+        // --- SISTEMA DE REACCIONES (LIKES) ---
+        function reaccionar(idDoc, tipo) {
+            if (!usuarioActual) {
+                alert("Debes iniciar sesión o registrarte para dar likes/dislikes.");
+                return;
+            }
+            const docRef = db.collection("scripts").doc(idDoc);
+            db.runTransaction((transaction) => {
+                return transaction.get(docRef).then((sfDoc) => {
+                    if (!sfDoc.exists) return;
+                    let nuevoValor = (sfDoc.data()[tipo] || 0) + 1;
+                    transaction.update(docRef, { [tipo]: nuevoValor });
+                });
+            }).then(() => {
+                const actual = parseInt(document.getElementById(`${tipo}-${idDoc}`).innerText);
+                document.getElementById(`${tipo}-${idDoc}`).innerText = actual + 1;
+            }).catch(err => console.error("Error al reaccionar: ", err));
+        }
+
+        // --- COMENTARIOS EN TIEMPO REAL ---
+        function vincularComentariosTiempoReal(idDoc) {
+            db.collection("scripts").doc(idDoc).collection("comentarios")
+              .orderBy("fecha", "asc")
+              .onSnapshot((snapshot) => {
+                  const cajaComentarios = document.getElementById(`lista-comentarios-${idDoc}`);
+                  if (snapshot.empty) {
+                      cajaComentarios.innerHTML = "<p style='color:#555; font-size:0.8rem; margin:0;'>Sé el primero en comentar este script.</p>";
+                      return;
+                  }
+                  cajaComentarios.innerHTML = "";
+                  snapshot.forEach((doc) => {
+                      const c = doc.data();
+                      cajaComentarios.innerHTML += `
+                          <div class="comentario-item">
+                              <span class="comentario-user">${c.usuario}:</span> ${c.texto}
+                          </div>
+                      `;
+                  });
+              });
+        }
+
+        function subirComentario(idDoc) {
+            if (!usuarioActual) {
+                alert("Necesitas crearte una cuenta o iniciar sesión para poder comentar.");
+                return;
+            }
+            const campoTexto = document.getElementById(`input-comentario-${idDoc}`);
+            const textoComentario = campoTexto.value.trim();
+            
+            if (textoComentario === "") return;
+
+            db.collection("scripts").doc(idDoc).collection("comentarios").add({
+                usuario: usuarioActual.email.split('@')[0], 
+                texto: textoComentario,
+                fecha: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                campoTexto.value = ""; 
+            }).catch(err => alert("Error al subir opinión: " + err.message));
+        }
 
         function copiarScript(id) {
             const codigo = document.getElementById(id).innerText;
             navigator.clipboard.writeText(codigo);
-            alert("¡Script copiado al portapapeles con éxito!");
+            alert("¡Script copiado al portapapeles!");
         }
     </script>
-
 </body>
 </html>
