@@ -1,4 +1,6 @@
-/* 1. RESETEO GENERAL Y TIPOGRAFÍA */
+/* ==========================================================================
+   1. RESETEO GENERAL Y TIPOGRAFÍA
+   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
@@ -14,31 +16,45 @@ body {
     flex-direction: column;
 }
 
-/* 2. MENÚ DE NAVEGACIÓN (BARRA SUPERIOR) */
+/* ==========================================================================
+   2. MENÚ DE NAVEGACIÓN (BARRA SUPERIOR FLOTANTE)
+   ========================================================================== */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 10%;
-    background-color: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(12px); /* Efecto vidrio esmerilado */
+    padding: 1rem 5%;
+    background-color: rgba(15, 23, 42, 0.65); 
+    backdrop-filter: blur(16px); /* Efecto vidrio esmerilado premium */
+    -webkit-backdrop-filter: blur(16px);
     position: fixed;
-    width: 100%;
-    top: 0;
+    width: 90%; 
+    max-width: 1200px;
+    top: 20px; /* Separado del borde superior para que flote */
+    left: 50%;
+    transform: translateX(-50%); 
+    border-radius: 50px; /* Diseño en forma de cápsula */
+    border: 1px solid rgba(255, 255, 255, 0.05); 
     z-index: 100;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 header .logo {
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: #38bdf8; /* Azul brillante */
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    background: linear-gradient(to right, #38bdf8, #06b6d4); /* Logotipo con degradado brillante */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 header nav a {
     color: #94a3b8;
     text-decoration: none;
     margin-left: 2rem;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 0.95rem;
+    position: relative;
     transition: color 0.3s ease;
 }
 
@@ -46,14 +62,32 @@ header nav a:hover {
     color: #38bdf8;
 }
 
-/* 3. SECCIÓN PRINCIPAL (HERO) */
+/* Línea animada azul debajo de los enlaces del menú */
+header nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #38bdf8;
+    transition: width 0.3s ease;
+}
+
+header nav a:hover::after {
+    width: 100%;
+}
+
+/* ==========================================================================
+   3. SECCIÓN PRINCIPAL (HERO)
+   ========================================================================== */
 .hero {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6rem 10% 4rem 10%; /* Ajustado padding superior */
-    margin-top: 80px;
+    padding: 8rem 10% 4rem 10%; 
+    margin-top: 40px;
     background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08), transparent 40%);
 }
 
@@ -79,7 +113,9 @@ header nav a:hover {
     line-height: 1.6;
 }
 
-/* 4. BOTÓN ESTILIZADO */
+/* ==========================================================================
+   4. BOTÓN ESTILIZADO PRINCIPAL
+   ========================================================================== */
 .btn-primary {
     display: inline-block;
     background-color: #38bdf8;
@@ -89,18 +125,21 @@ header nav a:hover {
     font-weight: 600;
     text-decoration: none;
     box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .btn-primary:hover {
     transform: translateY(-3px);
+    background-color: #7dd3fc;
     box-shadow: 0 6px 25px rgba(56, 189, 248, 0.5);
 }
 
-/* 5. SECCIÓN DE PROYECTOS */
+/* ==========================================================================
+   5. SECCIÓN DE PROYECTOS
+   ========================================================================== */
 .projects-section {
     padding: 6rem 10%;
-    background-color: #0b1329; /* Tono más oscuro para contrastar */
+    background-color: #0b1329; 
     text-align: center;
 }
 
@@ -123,14 +162,12 @@ header nav a:hover {
     border-radius: 2px;
 }
 
-/* Contenedor inteligente (Grid Responsivo) */
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
 }
 
-/* Diseño de cada Tarjeta */
 .project-card {
     background-color: #1e293b; 
     padding: 2.5rem 2rem;
@@ -141,8 +178,8 @@ header nav a:hover {
 }
 
 .project-card:hover {
-    transform: translateY(-10px); /* Eleva la tarjeta */
-    border-color: rgba(56, 189, 248, 0.3); /* Enciende el borde */
+    transform: translateY(-10px); 
+    border-color: rgba(56, 189, 248, 0.3); 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
@@ -176,7 +213,9 @@ header nav a:hover {
     letter-spacing: 1px;
 }
 
-/* 6. PIE DE PÁGINA */
+/* ==========================================================================
+   6. PIE DE PÁGINA
+   ========================================================================== */
 footer {
     text-align: center;
     padding: 2.5rem;
@@ -185,8 +224,9 @@ footer {
     background-color: #0b1329;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 /* ==========================================================================
-   7. PANTALLA DE BLOQUEO (SISTEMA DE LLAVE MANUAL)
+   7. PANTALLA DE BLOQUEO (DISEÑO PREMIUM CON ANIMACIONES)
    ========================================================================== */
 #pantalla-bloqueo {
     position: fixed;
@@ -194,7 +234,7 @@ footer {
     left: 0;
     width: 100%;
     height: 100vh;
-    background: #0f172a; /* Fondo idéntico al del cuerpo del sitio */
+    background: #0f172a; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -210,7 +250,7 @@ footer {
     text-align: center;
     max-width: 450px;
     width: 100%;
-    border: 1px solid rgba(56, 189, 248, 0.1); /* Sutil brillo azul en el borde */
+    border: 1px solid rgba(56, 189, 248, 0.1); 
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
@@ -228,7 +268,6 @@ footer {
     margin-bottom: 2rem;
 }
 
-/* Caja de entrada para la contraseña */
 .input-llave {
     width: 100%;
     padding: 1rem;
@@ -242,19 +281,18 @@ footer {
     box-sizing: border-box;
     letter-spacing: 2px;
     font-weight: 600;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición para encendido azul */
 }
 
 .input-llave:focus {
     outline: none;
-    border-color: #38bdf8; /* Al hacer clic, el borde se enciende en azul */
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    border-color: #38bdf8; /* Al hacer clic se ilumina en azul celeste */
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
 }
 
-/* Botón de verificación */
 .btn-entrar {
     width: 100%;
-    background-color: #38bdf8; /* Cambiado al color azul de tu marca */
+    background-color: #38bdf8; 
     color: #0f172a;
     border: none;
     padding: 1rem;
@@ -263,15 +301,16 @@ footer {
     border-radius: 8px;
     cursor: pointer;
     margin-bottom: 1.5rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .btn-entrar:hover {
-    background-color: #7dd3fc; /* Variante de azul más claro al pasar el mouse */
+    background-color: #7dd3fc; /* Se aclara suavemente al pasar el cursor */
     transform: scale(1.01);
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); /* Brilla más al pasar el mouse */
 }
 
-/* Botón inferior de Discord */
 .btn-obtener {
     background-color: #5865F2;
     color: #ffffff;
@@ -283,14 +322,15 @@ footer {
     cursor: pointer;
     text-decoration: none;
     display: block;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 15px rgba(88, 101, 242, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-obtener:hover {
     background-color: #4752C4;
+    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4); /* Brilla más el botón de Discord */
 }
 
-/* Mensaje de error si la llave es incorrecta */
 .error-msg {
     color: #ef4444;
     font-size: 0.9rem;
