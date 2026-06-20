@@ -185,3 +185,117 @@ footer {
     background-color: #0b1329;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+/* ==========================================================================
+   7. PANTALLA DE BLOQUEO (SISTEMA DE LLAVE MANUAL)
+   ========================================================================== */
+#pantalla-bloqueo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #0f172a; /* Fondo idéntico al del cuerpo del sitio */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.bloqueo-card {
+    background-color: #1e293b;
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    border: 1px solid rgba(56, 189, 248, 0.1); /* Sutil brillo azul en el borde */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.bloqueo-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #f8fafc;
+    font-weight: 700;
+}
+
+.bloqueo-card p {
+    color: #94a3b8;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+/* Caja de entrada para la contraseña */
+.input-llave {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+    letter-spacing: 2px;
+    font-weight: 600;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-llave:focus {
+    outline: none;
+    border-color: #38bdf8; /* Al hacer clic, el borde se enciende en azul */
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+/* Botón de verificación */
+.btn-entrar {
+    width: 100%;
+    background-color: #38bdf8; /* Cambiado al color azul de tu marca */
+    color: #0f172a;
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-entrar:hover {
+    background-color: #7dd3fc; /* Variante de azul más claro al pasar el mouse */
+    transform: scale(1.01);
+}
+
+/* Botón inferior de Discord */
+.btn-obtener {
+    background-color: #5865F2;
+    color: #ffffff;
+    border: none;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.btn-obtener:hover {
+    background-color: #4752C4;
+}
+
+/* Mensaje de error si la llave es incorrecta */
+.error-msg {
+    color: #ef4444;
+    font-size: 0.9rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1.2rem;
+    display: none;
+    font-weight: 500;
+}
