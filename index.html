@@ -50,60 +50,34 @@
         <h1>Delta Scripts Hub</h1>
         <p>Tu catálogo de scripts para Roblox.</p>
         
-        <!-- Estado en tiempo real -->
-        <div class="status" id="db-status">Sincronizando con Google Cloud...</div>
-
-        <!-- Contenedor dinámico -->
+        <div class="status" id="db-status">Cargando base de datos local...</div>
         <div id="contenedor-scripts"></div>
     </div>
 
     <script>
-        // Tus datos reales validados de deltascripts-1
-        const PROJECT_ID = "deltascripts-1";
-        const API_KEY = "AIzaSyCyxJWklgJAAMwmhSw9jF3CMsJXbF99CeA";
-        
         const statusElemento = document.getElementById('db-status');
         const contenedor = document.getElementById('contenedor-scripts');
 
-        async function obtenerScriptsFirebase() {
+        async function cargarScriptsLocales() {
             try {
-                // CORRECCIÓN CRÍTICA: Añadimos la clave API de Google al enlace para evitar el 'Load failed'
-                const url = `https://googleapis.com{PROJECT_ID}/databases/(default)/documents/scripts?key=${API_KEY}`;
+                // Al leer un archivo propio del mismo repositorio, el navegador jamás lo bloquea
+                const respuesta = await fetch('lista.json');
+                if (!respuesta.ok) throw new Error("No se pudo leer el archivo lista.json");
                 
-                const respuesta = await fetch(url);
-                
-                if (!respuesta.ok) {
-                    const errorDatos = await respuesta.json();
-                    throw new Error(errorDatos.error ? errorDatos.error.message : "Error del servidor de Google");
-                }
-
                 const datos = await respuesta.json();
 
-                // Si no hay documentos en tu panel
-                if (!datos.documents || datos.documents.length === 0) {
-                    statusElemento.innerText = "Conexión con Firebase establecida.";
-                    contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Tu colección 'scripts' está vacía en Firebase. Crea un documento en tu panel para verlo aquí.</div>";
-                    return;
-                }
-
-                // Renderizar tus datos
                 statusElemento.style.display = "none";
                 contenedor.innerHTML = "";
 
                 let contador = 0;
-                datos.documents.forEach((doc) => {
+                datos.forEach((item) => {
                     contador++;
-                    const campos = doc.fields;
                     const idUnico = "script-code-" + contador;
-                    
-                    // Jalar las variables 'nombre' y 'contenido' creadas en el panel de Firebase
-                    const nombre = campos.nombre && campos.nombre.stringValue ? campos.nombre.stringValue : 'Script sin nombre';
-                    const contenido = campos.contenido && campos.contenido.stringValue ? campos.contenido.stringValue : '-- Sin contenido';
 
                     contenedor.innerHTML += `
                         <div class="script-card">
-                            <h3 class="script-title">🚀 ${nombre}</h3>
-                            <div class="script-box" id="${idUnico}">${contenido}</div>
+                            <h3 class="script-title">🚀 ${item.nombre}</h3>
+                            <div class="script-box" id="${idUnico}">${item.contenido}</div>
                             <button class="btn-copy" onclick="copiarScript('${idUnico}')">Copiar Script</button>
                         </div>
                     `;
@@ -112,14 +86,12 @@
             } catch (error) {
                 statusElemento.style.background = "#331111";
                 statusElemento.style.color = "#ff4444";
-                statusElemento.innerText = "Error de sincronización: " + error.message;
+                statusElemento.innerText = "Error: " + error.message;
             }
         }
 
-        // Lanzar función
-        obtenerScriptsFirebase();
+        cargarScriptsLocales();
 
-        // Función del botón para copiar al portapapeles
         function copiarScript(id) {
             const codigo = document.getElementById(id).innerText;
             navigator.clipboard.writeText(codigo);
