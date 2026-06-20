@@ -95,10 +95,10 @@
             <h2>🔒 Acceso Restringido</h2>
             <p>Para ingresar a este sitio profesional, debes formar parte de nuestra comunidad en Discord. El acceso otorgado tiene una validez de 24 horas.</p>
             <div class="botones-container">
-                <!-- Paso 1: Tu nuevo enlace de invitación -->
-                <a href="https://discord.gg/xj79eGdgE" target="_blank" class="btn-comunidad">1. Unirse al Discord</a>
+                <!-- Paso 1: Tu enlace de invitación -->
+                <a href="https://discord.gg" target="_blank" class="btn-comunidad">1. Unirse al Discord</a>
                 
-                <!-- Paso 2: Enlace directo puro sin intermediarios de scripts para evitar congelamientos -->
+                <!-- Paso 2: ENLACE REHECHO CON TU NUEVO CLIENT ID REAL -->
                 <a href="https://discord.com" class="btn-discord">2. Verificar y Entrar</a>
             </div>
         </div>
@@ -118,7 +118,7 @@
         <main class="hero">
             <div class="hero-content">
                 <h1>Diseño digital con enfoque profesional.</h1>
-                <p>Creamos experiences web rápidas, estéticas y optimizadas para el mundo moderno.</p>
+                <p>Creamos experiencias web rápidas, estéticas y optimizadas para el mundo moderno.</p>
                 <a href="#proyectos" class="btn-primary">Ver mi trabajo</a>
             </div>
         </main>
@@ -157,7 +157,7 @@
         function verificarAcceso() {
             const horaAcceso = localStorage.getItem('llave_discord_tiempo');
             const ahora = new Date().getTime();
-            const veinticuatroHoras = 24 * 60 * 60 * 1000; // 24 Horas exactas
+            const veinticuatroHoras = 24 * 60 * 60 * 1000; // 24 Horas
 
             if (horaAcceso && (ahora - horaAcceso < veinticuatroHoras)) {
                 document.getElementById('pantalla-bloqueo').style.display = 'none';
