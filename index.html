@@ -18,7 +18,7 @@
             <p>Introduce la llave de acceso válida por 24 horas para continuar hacia el sitio.</p>
             
             <input type="text" id="input-llave" class="input-llave" placeholder="PEGA LA LLAVE AQUÍ">
-            <div id="error-msg" class="error-msg">Llave incorrecta o vencida. Inténtalo de nuevo.</div>
+            <div id="error-msg" class="error-msg" style="display: none; color: #ff4a4a; margin-top: 10px;">Llave incorrecta o vencida. Inténtalo de nuevo.</div>
             
             <button id="btn-entrar" class="btn-entrar">Verificar Llave</button>
             
@@ -103,37 +103,84 @@
         </footer>
     </div>
 
-    <!-- LÓGICA DE CONTROL DE LA LLAVE MANUAL -->
+    <!-- CDN DE LIBRERÍA DE SUPABASE -->
+    <script src="https://jsdelivr.net"></script>
+
+    <!-- CONTROL SECURE DE LLAVES DINÁMICAS -->
     <script>
-        const LLAVE_CORRECTA = 'DELTA2026'; 
+        const SUPABASE_URL = "https://supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        function verificarAcceso() {
-            const horaAcceso = localStorage.getItem('llave_manual_tiempo');
-            const llaveGuardada = localStorage.getItem('llave_manual_texto');
-            const ahora = new Date().getTime();
-            const veinticuatroHoras = 24 * 60 * 60 * 1000;
+        async function verificarAcceso() {
+            const tokenGuardado = localStorage.getItem('delta_hub_token');
+            
+            if (tokenGuardado) {
+                const esValido = await validarLlaveServidor(tokenGuardado);
+                if (esValido) {
+                    document.getElementById('pantalla-bloqueo').style.display = 'none';
+                    document.getElementById('contenido-protegido').style.display = 'block';
+                    return;
+                }
+            }
+            
+            localStorage.removeItem('delta_hub_token');
+            document.getElementById('pantalla-bloqueo').style.display = 'flex';
+            document.getElementById('contenido-protegido').style.display = 'none';
+        }
 
-            if (horaAcceso && llaveGuardada === LLAVE_CORRECTA && (ahora - horaAcceso < veinticuatroHoras)) {
-                document.getElementById('pantalla-bloqueo').style.display = 'none';
-                document.getElementById('contenido-protegido').style.display = 'block';
-            } else {
-                localStorage.removeItem('llave_manual_tiempo');
-                localStorage.removeItem('llave_manual_texto');
+        async function validarLlaveServidor(token) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('llaves_acceso')
+                    .select('creado_en')
+                    .eq('clave', token)
+                    .single();
+
+                if (error || !data) return false;
+
+                const fechaCreacion = new Date(data.creado_en).getTime();
+                const ahora = new Date().getTime();
+                const veinticuatroHoras = 24 * 60 * 60 * 1000;
+
+                return (ahora - fechaCreacion) < veinticuatroHoras;
+            } catch (err) {
+                console.error("Error en comunicación con base de datos:", err);
+                return false;
             }
         }
 
-        document.getElementById('btn-entrar').onclick = function() {
-            const llaveIngresada = document.getElementById('input-llave').value.trim();
+        document.getElementById('btn-entrar').onclick = async function() {
+            const inputElemento = document.getElementById('input-llave');
             const errorElemento = document.getElementById('error-msg');
+            const llaveIngresada = inputElemento.value.trim();
 
-            if (llaveIngresada === LLAVE_CORRECTA) {
-                errorElemento.style.display = 'none';
-                localStorage.setItem('llave_manual_texto', llaveIngresada);
-                localStorage.setItem('llave_manual_tiempo', new Date().getTime());
-                verificarAcceso();
-            } else {
+            errorElemento.style.display = 'none';
+
+            if (!llaveIngresada) {
+                errorElemento.textContent = "Por favor, introduce una llave.";
                 errorElemento.style.display = 'block';
+                return;
             }
+
+            this.innerText = "Verificando...";
+            this.disabled = true;
+
+            const esValida = await validarLlaveServidor(llaveIngresada);
+
+            if (esValida) {
+                localStorage.setItem('delta_hub_token', llaveIngresada);
+                document.getElementById('pantalla-bloqueo').style.display = 'none';
+                document.getElementById('contenido-protegido').style.display = 'block';
+            } else {
+                errorElemento.textContent = "Llave incorrecta o vencida. Inténtalo de nuevo.";
+                errorElemento.style.display = 'block';
+                localStorage.removeItem('delta_hub_token');
+            }
+
+            this.innerText = "Verificar Llave";
+            this.disabled = false;
         };
 
         window.onload = function() {
