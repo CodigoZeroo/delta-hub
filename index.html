@@ -8,103 +8,6 @@
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
-    <style>
-        /* Estilos profesionales para la pantalla de bloqueo con llave */
-        #pantalla-bloqueo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: #0f172a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 99999;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #ffffff;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .bloqueo-card {
-            background: #1e293b;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            text-align: center;
-            max-width: 450px;
-            width: 100%;
-            border: 1px solid #334155;
-        }
-        .bloqueo-card h2 {
-            font-size: 24px;
-            margin-bottom: 16px;
-            color: #f8fafc;
-        }
-        .bloqueo-card p {
-            color: #94a3b8;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 24px;
-        }
-        .input-llave {
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #475569;
-            background: #0f172a;
-            color: white;
-            text-align: center;
-            margin-bottom: 16px;
-            box-sizing: border-box;
-            letter-spacing: 2px;
-        }
-        .input-llave:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-        .btn-entrar {
-            width: 100%;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 16px;
-            transition: background 0.2s ease;
-        }
-        .btn-entrar:hover {
-            background: #2563eb;
-        }
-        .btn-obtener {
-            background: #5865F2;
-            color: white;
-            border: none;
-            padding: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-            transition: background 0.2s ease;
-        }
-        .btn-obtener:hover {
-            background: #4752C4;
-        }
-        .error-msg {
-            color: #ef4444;
-            font-size: 14px;
-            margin-top: -10px;
-            margin-bottom: 15px;
-            display: none;
-        }
-    </style>
 </head>
 <body>
 
@@ -119,7 +22,6 @@
             
             <button id="btn-entrar" class="btn-entrar">Verificar Llave</button>
             
-            <!-- Tu enlace de invitación actual de Discord -->
             <a href="https://discord.gg" target="_blank" class="btn-obtener">💬 Conseguir llave en Discord</a>
         </div>
     </div>
@@ -146,24 +48,31 @@
         <section id="proyectos" class="projects-section">
             <h2>Proyectos Destacados</h2>
             <div class="projects-grid">
+                
+                <!-- Tarjeta 1 -->
                 <div class="project-card">
                     <div class="card-icon">🌐</div>
                     <h3>E-Commerce Premium</h3>
                     <p>Tienda en línea de alta velocidad con pasarela de pagos integrada y diseño minimalista.</p>
                     <a href="#" class="card-link">Explorar proyecto &rarr;</a>
                 </div>
+
+                <!-- Tarjeta 2 -->
                 <div class="project-card">
                     <div class="card-icon">📱</div>
                     <h3>App Móvil de Gestión</h3>
                     <p>Interfaz intuitiva para iOS y Android enfocada en la productividad y experiencia de usuario.</p>
                     <a href="#" class="card-link">Explorar proyecto &rarr;</a>
                 </div>
+
+                <!-- Tarjeta 3 -->
                 <div class="project-card">
                     <div class="card-icon">⚡</div>
                     <h3>Optimización SEO y Web</h3>
                     <p>Estrategia de optimización que logró reducir el tiempo de carga a menos de 1 segundo.</p>
                     <a href="#" class="card-link">Explorar proyecto &rarr;</a>
                 </div>
+
             </div>
         </section>
 
@@ -174,35 +83,29 @@
 
     <!-- LÓGICA DE CONTROL DE LA LLAVE MANUAL -->
     <script>
-        // CONFIGURACIÓN: Escribe aquí la llave secreta que tus usuarios deben poner.
-        // Puedes cambiarla cuando quieras (por ejemplo, mañana pones 'DELTAXYZ')
         const LLAVE_CORRECTA = 'DELTA2026'; 
 
         function verificarAcceso() {
             const horaAcceso = localStorage.getItem('llave_manual_tiempo');
             const llaveGuardada = localStorage.getItem('llave_manual_texto');
             const ahora = new Date().getTime();
-            const veinticuatroHoras = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+            const veinticuatroHoras = 24 * 60 * 60 * 1000;
 
-            // Si guardó una llave, coincide con la actual, y no han pasado 24 horas:
             if (horaAcceso && llaveGuardada === LLAVE_CORRECTA && (ahora - horaAcceso < veinticuatroHoras)) {
                 document.getElementById('pantalla-bloqueo').style.display = 'none';
                 document.getElementById('contenido-protegido').style.display = 'block';
             } else {
-                // Si ya expiró o cambiaste la llave en el código, se borra el acceso
                 localStorage.removeItem('llave_manual_tiempo');
                 localStorage.removeItem('llave_manual_texto');
             }
         }
 
-        // Al hacer clic en verificar
         document.getElementById('btn-entrar').onclick = function() {
             const llaveIngresada = document.getElementById('input-llave').value.trim();
             const errorElemento = document.getElementById('error-msg');
 
             if (llaveIngresada === LLAVE_CORRECTA) {
                 errorElemento.style.display = 'none';
-                // Guardamos la llave y la hora actual en el navegador
                 localStorage.setItem('llave_manual_texto', llaveIngresada);
                 localStorage.setItem('llave_manual_tiempo', new Date().getTime());
                 verificarAcceso();
@@ -211,7 +114,6 @@
             }
         };
 
-        // Comprobación inicial al cargar la página
         window.onload = function() {
             verificarAcceso();
         };
