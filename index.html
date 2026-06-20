@@ -72,8 +72,9 @@
     <div id="pantalla-bloqueo">
         <div class="bloqueo-card">
             <h2>🔒 Acceso Restringido</h2>
-            <p>Para ingresar a este sitio profesional, debes verificar tu cuenta con Discord. Tu llave de acceso será válida por 24 horas.</p>
-            <button id="btn-discord" class="btn-discord">Verificar con Discord</button>
+            <p>Para ingresar a este sitio profesional, debes formar parte de nuestra comunidad. Únete al servidor de Discord y obtén tu acceso por 24 horas.</p>
+            <!-- Vinculamos directamente tu enlace de invitación personalizado -->
+            <button id="btn-discord" class="btn-discord">Unirse y Verificar con Discord</button>
         </div>
     </div>
 
@@ -127,28 +128,24 @@
 
     <!-- LÓGICA DE VERIFICACIÓN Y TIEMPO (24 HORAS) -->
     <script>
-        // Tu Client ID ya configurado correctamente
         const DISCORD_CLIENT_ID = '1517707106491306165'; 
-        
+        const DISCORD_INVITE_URL = 'https://discord.gg/73rehaFTw';
         const REDIRECT_URI = window.location.origin + window.location.pathname;
 
         function verificarAcceso() {
             const horaAcceso = localStorage.getItem('llave_discord_tiempo');
             const ahora = new Date().getTime();
-            const veinticuatroHoras = 24 * 60 * 60 * 1000; // Milisegundos en un día
+            const veinticuatroHoras = 24 * 60 * 60 * 1000;
 
-            // Si la llave existe y no ha expirado
             if (horaAcceso && (ahora - horaAcceso < veinticuatroHoras)) {
                 document.getElementById('pantalla-bloqueo').style.display = 'none';
                 document.getElementById('contenido-protegido').style.display = 'block';
             } else {
-                // Si ya expiró el tiempo, borramos los registros viejos
                 localStorage.removeItem('llave_discord_tiempo');
                 localStorage.removeItem('discord_access_token');
             }
         }
 
-        // Procesar la respuesta cuando regresan de Discord
         function procesarRetornoDiscord() {
             const fragmento = window.location.hash;
             if (fragmento) {
@@ -156,29 +153,31 @@
                 const accessToken = parametros.get('access_token');
 
                 if (accessToken) {
-                    // Guardamos el token y la hora actual como "llave" de entrada
                     localStorage.setItem('discord_access_token', accessToken);
                     localStorage.setItem('llave_discord_tiempo', new Date().getTime());
-                    
-                    // Limpiamos la URL para que se vea limpia y profesional sin los códigos raros
                     window.history.replaceState({}, document.title, window.location.pathname);
-                    
-                    // Validamos el acceso para mostrar la página
                     verificarAcceso();
                 }
             }
         }
 
-        // Ejecutar al cargar la página
         window.onload = function() {
             procesarRetornoDiscord();
             verificarAcceso();
         };
 
-        // Evento del botón para ir a iniciar sesión a Discord
+        // Redirección combinada: abre la invitación y prepara el flujo de la llave
         document.getElementById('btn-discord').onclick = function() {
+            // Abre tu servidor de Discord en una pestaña nueva para que se unan
+            window.open(DISCORD_INVITE_URL, '_blank');
+            
+            // Redirige la pestaña actual hacia el flujo de autorización para generar la llave temporal
             const urlDiscord = `https://discord.com{DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
-            window.location.href = urlDiscord;
+            
+            // Pequeño retraso para permitir que la pestaña de invitación se procese primero correctamente
+            setTimeout(() => {
+                window.location.href = urlDiscord;
+            }, 500);
         };
     </script>
 </body>
