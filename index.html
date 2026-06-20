@@ -73,7 +73,6 @@
         <div class="bloqueo-card">
             <h2>🔒 Acceso Restringido</h2>
             <p>Para ingresar a este sitio profesional, debes formar parte de nuestra comunidad. Únete al servidor de Discord y obtén tu acceso por 24 horas.</p>
-            <!-- Vinculamos directamente tu enlace de invitación personalizado -->
             <button id="btn-discord" class="btn-discord">Unirse y Verificar con Discord</button>
         </div>
     </div>
@@ -129,13 +128,13 @@
     <!-- LÓGICA DE VERIFICACIÓN Y TIEMPO (24 HORAS) -->
     <script>
         const DISCORD_CLIENT_ID = '1517707106491306165'; 
-        const DISCORD_INVITE_URL = 'https://discord.gg/73rehaFTw';
+        const DISCORD_INVITE_URL = 'https://discord.gg';
         const REDIRECT_URI = window.location.origin + window.location.pathname;
 
         function verificarAcceso() {
             const horaAcceso = localStorage.getItem('llave_discord_tiempo');
             const ahora = new Date().getTime();
-            const veinticuatroHoras = 24 * 60 * 60 * 1000;
+            const veinticuatroHoras = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
 
             if (horaAcceso && (ahora - horaAcceso < veinticuatroHoras)) {
                 document.getElementById('pantalla-bloqueo').style.display = 'none';
@@ -166,15 +165,12 @@
             verificarAcceso();
         };
 
-        // Redirección combinada: abre la invitación y prepara el flujo de la llave
+        // Redirección corregida y funcional
         document.getElementById('btn-discord').onclick = function() {
-            // Abre tu servidor de Discord en una pestaña nueva para que se unan
             window.open(DISCORD_INVITE_URL, '_blank');
             
-            // Redirige la pestaña actual hacia el flujo de autorización para generar la llave temporal
             const urlDiscord = `https://discord.com{DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
             
-            // Pequeño retraso para permitir que la pestaña de invitación se procese primero correctamente
             setTimeout(() => {
                 window.location.href = urlDiscord;
             }, 500);
