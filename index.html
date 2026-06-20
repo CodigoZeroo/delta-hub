@@ -9,86 +9,79 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
-    <!-- ESTILOS INTEGRADOS: Carga instantánea sin depender de archivos externos -->
+    <!-- ESTILOS INTEGRADOS NATIVOS PARA EVITAR LA PANTALLA NEGRA -->
     <style>
         #pantalla-bloqueo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #111827 !important; /* Fondo gris oscuro premium visible */
-            display: flex !important; /* Fuerza a mostrarse de inmediato */
-            justify-content: center;
-            align-items: center;
-            z-index: 999999;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: #0f172a !important; /* Fondo premium oscuro garantizado */
+            display: flex !important; /* Fuerza a mostrar la tarjeta de inmediato */
+            justify-content: center !important;
+            align-items: center !important;
+            z-index: 999999 !important;
         }
 
         .bloqueo-card {
             background: #1e293b !important;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2.5rem 2rem;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 420px;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            padding: 2.5rem 2rem !important;
+            border-radius: 24px !important;
+            width: 90% !important;
+            max-width: 420px !important;
+            text-align: center !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
         }
 
         .bloqueo-card h2 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 0.8rem;
+            font-size: 1.6rem !important;
+            font-weight: 800 !important;
+            margin-bottom: 0.8rem !important;
             color: #ffffff !important;
         }
 
         .bloqueo-card p {
-            font-size: 0.95rem;
+            font-size: 0.95rem !important;
             color: #94a3b8 !important;
-            line-height: 1.5;
-            margin-bottom: 1.8rem;
+            line-height: 1.5 !important;
+            margin-bottom: 1.8rem !important;
         }
 
         .input-llave {
-            width: 100%;
-            padding: 0.9rem 1.2rem;
+            width: 100% !important;
+            padding: 0.9rem 1.2rem !important;
             background: #0f172a !important;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 12px !important;
             color: #ffffff !important;
-            font-weight: 700;
-            font-size: 1rem;
-            text-align: center;
-            outline: none;
-            margin-bottom: 1rem;
+            font-weight: 700 !important;
+            font-size: 1rem !important;
+            text-align: center !important;
+            outline: none !important;
+            margin-bottom: 1rem !important;
         }
 
         .btn-entrar {
-            width: 100%;
+            width: 100% !important;
             background: linear-gradient(135deg, #38bdf8, #06b6d4) !important;
             color: #0f172a !important;
-            border: none;
-            padding: 0.9rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-entrar:disabled {
-            background: #475569 !important;
-            color: #94a3b8 !important;
-            cursor: not-allowed;
+            border: none !important;
+            padding: 0.9rem !important;
+            border-radius: 12px !important;
+            font-size: 1rem !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
         }
 
         .btn-obtener {
-            display: inline-block;
+            display: inline-block !important;
             color: #38bdf8 !important;
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 600;
-            margin-top: 1rem;
+            text-decoration: none !important;
+            font-size: 0.88rem !important;
+            font-weight: 600 !important;
+            margin-top: 1rem !important;
         }
     </style>
 </head>
@@ -101,7 +94,7 @@
             <p>Introduce la llave de acceso válida por 24 horas para continuar hacia el sitio.</p>
             
             <input type="text" id="input-llave" class="input-llave" placeholder="PEGA LA LLAVE AQUÍ">
-            <div id="error-msg" style="display: none; color: #ff4a4a; margin-bottom: 15px; font-size: 0.9rem; font-weight: 600;"></div>
+            <div id="error-msg" style="display: none; color: #ff4a4a; margin-bottom: 15px; font-size: 0.9rem; font-weight: 600;">Llave incorrecta o vencida.</div>
             
             <button id="btn-entrar" class="btn-entrar">Verificar Llave</button>
             
@@ -173,26 +166,21 @@
     <!-- CDN DE LIBRERÍA DE SUPABASE -->
     <script src="https://jsdelivr.net"></script>
 
-    <!-- CONTROL SECURE CON ARRANQUE INMEDIATO -->
+    <!-- CONTROL SECURE ANTIBLOQUEO -->
     <script>
         const SUPABASE_URL = "https://supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
         
-        let supabaseClient;
+        let supabaseClient = null;
 
-        // Arranca la verificación en cuanto el HTML básico esté listo en pantalla
-        document.addEventListener("DOMContentLoaded", function() {
-            try {
-                if (typeof Supabase !== 'undefined') {
-                    supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    verificarAcceso();
-                } else {
-                    console.error("La librería de Supabase no cargó correctamente.");
-                }
-            } catch (e) {
-                console.error("Error inicializando la app:", e);
+        // Intentamos arrancar Supabase de forma segura sin romper la página
+        try {
+            if (typeof Supabase !== 'undefined') {
+                supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
-        });
+        } catch (err) {
+            console.error("No se pudo iniciar Supabase debido a restricciones de red o CDN:", err);
+        }
 
         async function verificarAcceso() {
             const tokenGuardado = localStorage.getItem('delta_hub_token');
@@ -200,15 +188,11 @@
             if (tokenGuardado && supabaseClient) {
                 const esValida = await validarLlaveServidor(tokenGuardado);
                 if (esValida) {
-                    document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
-                    document.getElementById('contenido-protegido').style.display = 'block';
+                    mostrarSitio();
                     return;
                 }
             }
-            
-            localStorage.removeItem('delta_hub_token');
-            document.getElementById('pantalla-bloqueo').style.setProperty('display', 'flex', 'important');
-            document.getElementById('contenido-protegido').style.display = 'none';
+            ocultarSitio();
         }
 
         async function validarLlaveServidor(token) {
@@ -228,9 +212,20 @@
 
                 return (ahora - fechaCreacion) < veinticuatroHoras;
             } catch (err) {
-                console.error("Error al consultar Supabase:", err);
+                console.error("Error al consultar base de datos:", err);
                 return false;
             }
+        }
+
+        function mostrarSitio() {
+            document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
+            document.getElementById('contenido-protegido').style.display = 'block';
+        }
+
+        function ocultarSitio() {
+            localStorage.removeItem('delta_hub_token');
+            document.getElementById('pantalla-bloqueo').style.setProperty('display', 'flex', 'important');
+            document.getElementById('contenido-protegido').style.display = 'none';
         }
 
         document.getElementById('btn-entrar').onclick = async function() {
@@ -241,7 +236,13 @@
             errorElemento.style.display = 'none';
 
             if (!llaveIngresada) {
-                errorElemento.textContent = "Por favor, introduce una llave.";
+                errorElemento.textContent = "Por favor, escribe una llave.";
+                errorElemento.style.display = 'block';
+                return;
+            }
+
+            if (!supabaseClient) {
+                errorElemento.textContent = "Error: No hay conexión con el servidor de llaves.";
                 errorElemento.style.display = 'block';
                 return;
             }
@@ -253,17 +254,19 @@
 
             if (esValida) {
                 localStorage.setItem('delta_hub_token', llaveIngresada);
-                document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
-                document.getElementById('contenido-protegido').style.display = 'block';
+                mostrarSitio();
             } else {
                 errorElemento.textContent = "Llave incorrecta o vencida. Inténtalo de nuevo.";
                 errorElemento.style.display = 'block';
-                localStorage.removeItem('delta_hub_token');
+                ocultarSitio();
             }
 
             this.innerText = "Verificar Llave";
             this.disabled = false;
         };
+
+        // Ejecución inmediata
+        verificarAcceso();
     </script>
 </body>
 </html>
