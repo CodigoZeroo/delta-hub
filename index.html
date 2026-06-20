@@ -9,7 +9,7 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
-    <!-- ESTILOS INTERNOS INTEGRADOS PARA ROMPER LA PANTALLA NEGRA -->
+    <!-- ESTILOS INTERNOS INTEGRADOS PARA EVITAR LA PANTALLA NEGRA -->
     <style>
         #pantalla-bloqueo {
             position: fixed !important;
@@ -76,6 +76,12 @@
             font-weight: 700 !important;
             cursor: pointer !important;
             display: block !important;
+        }
+
+        .btn-entrar:disabled {
+            background: #475569 !important;
+            color: #94a3b8 !important;
+            cursor: not-allowed !important;
         }
 
         .btn-obtener {
@@ -166,7 +172,7 @@
             <p>&copy; 2026 DELTA HUB. Diseñado para la comunidad de Roblox.</p>
         </footer>
     </div>
-    <!-- SE TRASLADÓ LA CARGA DE SUPABASE A UN MÓDULO ASÍNCRONO PARA EVITAR CONGELAMIENTOS -->
+    <!-- SE TRASLADÓ LA CARGA DE SUPABASE A UN MÓDULO ASÍNCRONO CON CAPTURA DE MENSAJES -->
     <script type="module">
         import { createClient } from 'https://jsdelivr.net';
 
@@ -179,7 +185,7 @@
             const tokenGuardado = localStorage.getItem('delta_hub_token');
             if (tokenGuardado) {
                 const esValida = await validarLlaveServidor(tokenGuardado);
-                if (esValida) {
+                if (esValida === true) {
                     document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
                     document.getElementById('contenido-protegido').style.display = 'block';
                     return;
@@ -195,19 +201,23 @@
                 const { data, error } = await supabaseClient
                     .from('llaves_acceso')
                     .select('creado_en')
-                    .eq('clave', token)
-                    .single();
+                    .eq('clave', token);
 
-                if (error || !data) return false;
+                if (error) return `Error base de datos: ${error.message}`;
+                if (!data || data.length === 0) return "Llave incorrecta o no registrada.";
 
-                const fechaCreacion = new Date(data.creado_en).getTime();
+                // Tomamos el primer registro encontrado
+                const fechaCreacion = new Date(data[0].creado_en).getTime();
                 const ahora = new Date().getTime();
                 const veinticuatroHoras = 24 * 60 * 60 * 1000;
 
-                return (ahora - fechaCreacion) < veinticuatroHoras;
+                if ((ahora - fechaCreacion) > veinticuatroHoras) {
+                    return "Esta llave ya expiró tras cumplirse las 24h.";
+                }
+
+                return true; // Acceso concedido exitosamente
             } catch (err) {
-                console.error("Error consultando llaves:", err);
-                return false;
+                return `Fallo de conexión: ${err.message || 'Verifica RLS o internet'}`;
             }
         }
 
@@ -227,14 +237,14 @@
             this.innerText = "Verificando...";
             this.disabled = true;
 
-            const esValida = await validarLlaveServidor(llaveIngresada);
+            const resultado = await validarLlaveServidor(llaveIngresada);
 
-            if (esValida) {
+            if (resultado === true) {
                 localStorage.setItem('delta_hub_token', llaveIngresada);
                 document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
                 document.getElementById('contenido-protegido').style.display = 'block';
             } else {
-                errorElemento.textContent = "Llave incorrecta o vencida. Inténtalo de nuevo.";
+                errorElemento.textContent = resultado;
                 errorElemento.style.display = 'block';
                 localStorage.removeItem('delta_hub_token');
             }
