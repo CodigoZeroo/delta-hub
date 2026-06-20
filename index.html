@@ -12,21 +12,21 @@
         <h1>Delta Scripts Hub</h1>
         <p>Tu catálogo de scripts para Roblox.</p>
         
-        <!-- Aquí se mostrarán tus scripts de Roblox automáticamente -->
-        <div id="lista-scripts">
-            <div class="status" id="db-status">Buscando scripts en Firebase...</div>
+        <!-- Zona de control para ver qué pasa en vivo -->
+        <div id="contenedor-principal">
+            <div class="status" id="db-status">Iniciando sistema...</div>
         </div>
     </div>
 
-    <!-- CONFIGURACIÓN DE GOOGLE FIREBASE -->
+    <!-- NÚCLEO DE CONEXIÓN CON GOOGLE FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://gstatic.com";
         import { getFirestore, collection, getDocs } from "https://gstatic.com";
 
-        // Tus credenciales reales de deltascripts-1
+        // Tus credenciales oficiales de deltascripts-1
         const firebaseConfig = {
             apiKey: "AIzaSyCyxJWklgJAAMwmhSw9jF3CMsJXbF99CeA",
-            authDomain: "://firebaseapp.com",
+            authDomain: "deltascripts-1.firebaseapp.com",
             projectId: "deltascripts-1",
             storageBucket: "deltascripts-1.firebasestorage.app",
             messagingSenderId: "735316669110",
@@ -34,42 +34,50 @@
             measurementId: "G-90E1DSBCWY"
         };
 
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        try {
+            // 1. Forzar encendido de Firebase
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+            
+            document.getElementById('db-status').innerText = "Conectado. Buscando tu base de datos...";
 
-        // FUNCIÓN PARA LEER TUS SCRIPTS
-        async function cargarScripts() {
-            const contenedor = document.getElementById('lista-scripts');
-            try {
-                // Buscamos la colección llamada "scripts" que creaste
-                const querySnapshot = await getDocs(collection(db, "scripts"));
-                
-                // Si la base de datos está vacía
-                if (querySnapshot.empty) {
-                    contenedor.innerHTML = "<div class='status'>Conectado a Firebase, pero no hay scripts guardados aún.</div>";
-                    return;
+            // 2. Intentar descargar tus datos
+            const cargarDatos = async () => {
+                try {
+                    const respuesta = await getDocs(collection(db, "scripts"));
+                    const contenedor = document.getElementById('contenedor-principal');
+                    
+                    if (respuesta.empty) {
+                        contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Conectado a Firebase, pero tu colección 'scripts' está vacía en el panel de Google.</div>";
+                        return;
+                    }
+
+                    // Si todo sale bien, limpia e imprime tu script
+                    contenedor.innerHTML = "";
+                    respuesta.forEach((doc) => {
+                        const item = doc.data();
+                        contenedor.innerHTML += `
+                            <div style="background: #161622; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #2a2a3a;">
+                                <h3 style="color: #00ff88; margin: 0 0 10px 0; font-size: 1.3rem;">${item.nombre || 'Script sin nombre'}</h3>
+                                <pre style="background: #000; color: #00ff88; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; border: 1px solid #111;"><code>${item.contenido || '-- Vacío'}</code></pre>
+                            </div>
+                        `;
+                    });
+
+                } catch (errorDatabase) {
+                    // Si las reglas fallan o Google bloquea el acceso
+                    document.getElementById('db-status').style.background = "#331111";
+                    document.getElementById('db-status').style.color = "#ff4444";
+                    document.getElementById('db-status').innerText = "Bloqueo de Google: " + errorDatabase.message;
                 }
+            };
 
-                // Si encuentra scripts, los dibuja en la pantalla
-                contenedor.innerHTML = ""; 
-                querySnapshot.forEach((doc) => {
-                    const datos = doc.data();
-                    contenedor.innerHTML += `
-                        <div style="background: #1e1e2a; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #333;">
-                            <h3 style="color: #00ff88; margin-top: 0;">${datos.nombre || 'Script sin nombre'}</h3>
-                            <pre style="background: #000; color: #fff; padding: 10px; border-radius: 5px; overflow-x: auto;"><code>${datos.contenido || '-- Sin contenido'}</code></pre>
-                        </div>
-                    `;
-                });
-            } catch (error) {
-                console.error("Error original de Firebase:", error);
-                contenedor.innerHTML = `<div class='status' style='color: #ff4444;'>Error de conexión: ${error.message}</div>`;
-            }
+            cargarDatos();
+
+        } catch (errorGeneral) {
+            // Si las llaves de arriba están mal puestas
+            document.getElementById('db-status').innerText = "Error crítico de inicio: " + errorGeneral.message;
         }
-
-        // Ejecutar la búsqueda al cargar la página
-        cargarScripts();
     </script>
 
 </body>
