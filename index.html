@@ -78,8 +78,7 @@
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
-            text-decoration: none;
-            display: block;
+            text-decoration: block;
             transition: background 0.2s ease;
         }
         .btn-discord:hover {
@@ -98,7 +97,7 @@
                 <!-- Paso 1: Tu enlace de invitación -->
                 <a href="https://discord.gg" target="_blank" class="btn-comunidad">1. Unirse al Discord</a>
                 
-                <!-- Paso 2: ENLACE REHECHO CON TU NUEVO CLIENT ID REAL -->
+                <!-- Paso 2: Enlace oficial corregido con RESPONSE_TYPE=TOKEN y tu REDIRECT_URI exacta -->
                 <a href="https://discord.com" class="btn-discord">2. Verificar y Entrar</a>
             </div>
         </div>
@@ -157,7 +156,7 @@
         function verificarAcceso() {
             const horaAcceso = localStorage.getItem('llave_discord_tiempo');
             const ahora = new Date().getTime();
-            const veinticuatroHoras = 24 * 60 * 60 * 1000; // 24 Horas
+            const veinticuatroHoras = 24 * 60 * 60 * 1000;
 
             if (horaAcceso && (ahora - horaAcceso < veinticuatroHoras)) {
                 document.getElementById('pantalla-bloqueo').style.display = 'none';
