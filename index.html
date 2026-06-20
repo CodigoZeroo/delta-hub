@@ -6,7 +6,6 @@
     <title>Delta Scripts Roblox</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Estilos exactos para tus tarjetas oscuras */
         .script-card {
             background: #161622; 
             padding: 20px; 
@@ -51,39 +50,43 @@
         <h1>Delta Scripts Hub</h1>
         <p>Tu catálogo de scripts para Roblox.</p>
         
-        <!-- Indicador de estado rápido -->
-        <div class="status" id="db-status">Sincronizando con la nube...</div>
+        <!-- Estado en tiempo real -->
+        <div class="status" id="db-status">Sincronizando con Google Cloud...</div>
 
-        <!-- Contenedor donde aparecerán tus scripts de Firebase -->
+        <!-- Contenedor dinámico -->
         <div id="contenedor-scripts"></div>
     </div>
 
     <script>
-        // Conexión limpia mediante API REST (Cero librerías externas)
+        // Tus datos reales validados de deltascripts-1
         const PROJECT_ID = "deltascripts-1";
+        const API_KEY = "AIzaSyCyxJWklgJAAMwmhSw9jF3CMsJXbF99CeA";
+        
         const statusElemento = document.getElementById('db-status');
         const contenedor = document.getElementById('contenedor-scripts');
 
-        async function obtenerScriptsDesdeNube() {
+        async function obtenerScriptsFirebase() {
             try {
-                // Consultamos directamente el endpoint de la base de datos de Google sin intermediarios
-                const url = `https://googleapis.com{PROJECT_ID}/databases/(default)/documents/scripts`;
+                // CORRECCIÓN CRÍTICA: Añadimos la clave API de Google al enlace para evitar el 'Load failed'
+                const url = `https://googleapis.com{PROJECT_ID}/databases/(default)/documents/scripts?key=${API_KEY}`;
+                
                 const respuesta = await fetch(url);
                 
                 if (!respuesta.ok) {
-                    throw new Error("No se obtuvo respuesta del servidor remoto.");
+                    const errorDatos = await respuesta.json();
+                    throw new Error(errorDatos.error ? errorDatos.error.message : "Error del servidor de Google");
                 }
 
                 const datos = await respuesta.json();
 
-                // Si la colección de Firebase no tiene documentos creados
+                // Si no hay documentos en tu panel
                 if (!datos.documents || datos.documents.length === 0) {
-                    statusElemento.innerText = "Conexión exitosa.";
-                    contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Tu colección 'scripts' está vacía en Firebase. Agrega un documento desde el panel web de Google.</div>";
+                    statusElemento.innerText = "Conexión con Firebase establecida.";
+                    contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Tu colección 'scripts' está vacía en Firebase. Crea un documento en tu panel para verlo aquí.</div>";
                     return;
                 }
 
-                // Limpiamos la pantalla e imprimimos tus scripts reales
+                // Renderizar tus datos
                 statusElemento.style.display = "none";
                 contenedor.innerHTML = "";
 
@@ -93,9 +96,9 @@
                     const campos = doc.fields;
                     const idUnico = "script-code-" + contador;
                     
-                    // Extraemos los textos de tus campos de Firebase
+                    // Jalar las variables 'nombre' y 'contenido' creadas en el panel de Firebase
                     const nombre = campos.nombre && campos.nombre.stringValue ? campos.nombre.stringValue : 'Script sin nombre';
-                    const contenido = campos.contenido && campos.contenido.stringValue ? campos.contenido.stringValue : '-- Vacío';
+                    const contenido = campos.contenido && campos.contenido.stringValue ? campos.contenido.stringValue : '-- Sin contenido';
 
                     contenedor.innerHTML += `
                         <div class="script-card">
@@ -113,8 +116,8 @@
             }
         }
 
-        // Ejecutar la petición al cargar la web
-        obtenerScriptsDesdeNube();
+        // Lanzar función
+        obtenerScriptsFirebase();
 
         // Función del botón para copiar al portapapeles
         function copiarScript(id) {
