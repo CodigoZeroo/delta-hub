@@ -9,7 +9,7 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
-    <!-- ESTILOS INTERNOS DE CONTROL INMEDIATO PARA EVITAR PANTALLA EN NEGRO -->
+    <!-- ESTILOS DE CONTROL INMEDIATO PARA EVITAR PANTALLA EN NEGRO -->
     <style>
         #pantalla-bloqueo {
             position: fixed;
@@ -180,7 +180,8 @@
         const SUPABASE_URL = "https://supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
         
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // CORRECCIÓN CLAVE: Uso de 'Supabase' con S mayúscula obligatorio para CDN
+        const supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function verificarAcceso() {
             const tokenGuardado = localStorage.getItem('delta_hub_token');
