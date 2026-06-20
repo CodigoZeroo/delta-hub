@@ -95,15 +95,16 @@
             <h2>🔒 Acceso Restringido</h2>
             <p>Para ingresar a este sitio profesional, debes formar parte de nuestra comunidad en Discord. El acceso tiene una validez temporal de 24 horas.</p>
             <div class="botones-container">
-                <!-- Paso 1: Unirse al Servidor -->
+                <!-- Paso 1: Unirse al Servidor de forma externa -->
                 <a href="https://discord.gg" target="_blank" class="btn-comunidad">1. Unirse al Discord</a>
-                <!-- Paso 2: Validar el Acceso -->
-                <button id="btn-discord" class="btn-discord">2. Verificar y Entrar</button>
+                
+                <!-- Paso 2: Enlace directo puro para evitar errores de clicks -->
+                <a href="https://discord.com" class="btn-discord">2. Verificar y Entrar</a>
             </div>
         </div>
     </div>
 
-    <!-- CONTENIDO PROTEGIDO (ID arreglado y unificado) -->
+    <!-- CONTENIDO PROTEGIDO -->
     <div id="contenido-protegido" style="display: none;">
         <header>
             <div class="logo">PROSÍTIO</div>
@@ -151,20 +152,14 @@
         </footer>
     </div>
 
-    <!-- LÓGICA DE VERIFICACIÓN AUTOMÁTICA (24 HORAS) -->
+    <!-- LÓGICA DE VERIFICACIÓN AUTOMÁTICA -->
     <script>
-        const DISCORD_CLIENT_ID = '1517707106491306165'; 
-        
-        // Esta línea detecta tu dirección automáticamente sin importar las barras "/"
-        const REDIRECT_URI = window.location.origin + window.location.pathname;
-
         function verificarAcceso() {
             const horaAcceso = localStorage.getItem('llave_discord_tiempo');
             const ahora = new Date().getTime();
             const veinticuatroHoras = 24 * 60 * 60 * 1000;
 
             if (horaAcceso && (ahora - horaAcceso < veinticuatroHoras)) {
-                // Oculta bloqueo y muestra el contenido real
                 document.getElementById('pantalla-bloqueo').style.display = 'none';
                 document.getElementById('contenido-protegido').style.display = 'block';
             } else {
@@ -182,8 +177,6 @@
                 if (accessToken) {
                     localStorage.setItem('discord_access_token', accessToken);
                     localStorage.setItem('llave_discord_tiempo', new Date().getTime());
-                    
-                    // Limpia la URL de fragmentos extraños para dejarla limpia
                     window.history.replaceState({}, document.title, window.location.pathname);
                     verificarAcceso();
                 }
@@ -193,12 +186,6 @@
         window.onload = function() {
             procesarRetornoDiscord();
             verificarAcceso();
-        };
-
-        // Evento del botón de inicio de sesión
-        document.getElementById('btn-discord').onclick = function() {
-            const urlDiscord = `https://discord.com{DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
-            window.location.href = urlDiscord;
         };
     </script>
 </body>
