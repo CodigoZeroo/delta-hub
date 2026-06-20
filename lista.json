@@ -1,0 +1,10 @@
+[
+    {
+        "nombre": "Delta Executor Auto-Farm",
+        "contenido": "loadstring(game:HttpGet(\"https://githubusercontent.com\"))()"
+    },
+    {
+        "nombre": "Fly & Noclip Hack",
+        "contenido": "loadstring(game:HttpGet(\"https://githubusercontent.com\"))()"
+    }
+]
