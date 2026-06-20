@@ -17,21 +17,21 @@ body {
 }
 
 /* ==========================================================================
-   2. MENÚ DE NAVEGACIÓN (BARRA SUPERIOR ANTIBUG / DESLIZABLE)
+   2. MENÚ DE NAVEGACIÓN (BARRA SUPERIOR CON INDICADOR DE SCROLL)
    ========================================================================== */
 header {
     display: flex;
-    flex-direction: row; /* Elementos en fila */
+    flex-direction: row; 
     justify-content: space-between;
     align-items: center;
-    padding: 0.8rem 1.2rem; /* Compactado para teléfonos */
+    padding: 0.8rem 1.2rem; 
     background-color: rgba(15, 23, 42, 0.75); 
     backdrop-filter: blur(16px); 
     -webkit-backdrop-filter: blur(16px);
     position: fixed;
     width: 92%; 
     max-width: 1200px;
-    top: 12px; /* Más pegado arriba para ganar espacio visual */
+    top: 12px; 
     left: 50%;
     transform: translateX(-50%); 
     border-radius: 50px; 
@@ -39,46 +39,46 @@ header {
     z-index: 100;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     gap: 10px;
+    position: fixed;
 }
 
 header .logo {
     font-weight: 800;
-    font-size: 1.1rem; /* Ligeramente más pequeño para que no empuje el menú */
+    font-size: 1.1rem; 
     letter-spacing: 2px;
     background: linear-gradient(to right, #38bdf8, #06b6d4); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    white-space: nowrap; /* Evita que el logo se parta en dos líneas */
+    white-space: nowrap; 
 }
 
-/* El contenedor de los enlaces ahora es deslizable si se queda sin espacio */
+/* Contenedor del menú con indicador visual implícito */
 header nav {
     display: flex;
     flex-direction: row;
     align-items: center;
-    overflow-x: auto; /* Activa la barra deslizable horizontal */
-    white-space: nowrap; /* Fuerza a los enlaces a quedarse en una sola línea */
-    padding-bottom: 3px; /* Espacio para que la línea animada no se corte */
-    max-width: 70%; /* Ocupa el resto del ancho de la barra */
-    
-    /* Oculta la barra de scroll visualmente en Chrome/Safari/Edge para que se vea limpio */
+    overflow-x: auto; 
+    white-space: nowrap; 
+    padding-bottom: 3px; 
+    max-width: 68%; 
     -webkit-overflow-scrolling: touch; 
+    scrollbar-width: none; /* Oculta barra en Firefox */
+    
+    /* Creamos un efecto de máscara: el texto se desvanece a la derecha en móviles */
+    mask-image: linear-gradient(to right, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
 }
 
 header nav::-webkit-scrollbar {
-    display: none; /* Oculta la barra gris fea de scroll */
-}
-
-header nav {
-    scrollbar-width: none; /* Oculta la barra en Firefox */
+    display: none; /* Oculta la barra en Chrome/Safari */
 }
 
 header nav a {
     color: #94a3b8;
     text-decoration: none;
-    margin-left: 1.2rem; /* Margen reducido para evitar el bug en celulares */
+    margin-left: 1.2rem; 
     font-weight: 600;
-    font-size: 0.85rem; /* Letras más compactas y legibles en móviles */
+    font-size: 0.85rem; 
     position: relative;
     transition: color 0.3s ease;
     display: inline-block;
@@ -88,7 +88,6 @@ header nav a:hover {
     color: #38bdf8;
 }
 
-/* Línea animada azul debajo de los enlaces del menú */
 header nav a::after {
     content: '';
     position: absolute;
@@ -102,6 +101,24 @@ header nav a::after {
 
 header nav a:hover::after {
     width: 100%;
+}
+
+/* Opcional: Un pequeño efecto visual de flecha animada en pantallas pequeñas */
+@media (max-width: 480px) {
+    header::after {
+        content: '→';
+        color: #38bdf8;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-left: -5px;
+        animation: apuntar Derecha 1.5s infinite;
+        opacity: 0.7;
+    }
+}
+
+@keyframes apuntarDerecha {
+    0%, 100% { transform: translateX(0); opacity: 0.4; }
+    50% { transform: translateX(4px); opacity: 1; }
 }
 
 /* ==========================================================================
@@ -164,7 +181,7 @@ header nav a:hover::after {
 }
 
 /* ==========================================================================
-   4. BOTÓN ESTILIZADO PRINCIPAL CON EFECTO GLOW
+   4. BOTÓN ESTILIZADO PRINCIPAL
    ========================================================================== */
 .btn-primary {
     display: inline-block;
