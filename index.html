@@ -8,6 +8,91 @@
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <!-- ESTILOS INTERNOS DE CONTROL INMEDIATO PARA EVITAR PANTALLA EN NEGRO -->
+    <style>
+        #pantalla-bloqueo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, #1e293b, #0f172a);
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        .bloqueo-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .bloqueo-card h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            color: #ffffff;
+        }
+
+        .bloqueo-card p {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 1.8rem;
+        }
+
+        .input-llave {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            margin-bottom: 1rem;
+        }
+
+        .btn-entrar {
+            width: 100%;
+            background: linear-gradient(135deg, #38bdf8, #06b6d4);
+            color: #0f172a;
+            border: none;
+            padding: 0.9rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-entrar:disabled {
+            background: #475569;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .btn-obtener {
+            display: inline-block;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+    </style>
 </head>
 <body>
 
@@ -18,7 +103,7 @@
             <p>Introduce la llave de acceso válida por 24 horas para continuar hacia el sitio.</p>
             
             <input type="text" id="input-llave" class="input-llave" placeholder="PEGA LA LLAVE AQUÍ">
-            <div id="error-msg" class="error-msg" style="display: none; color: #ff4a4a; margin-top: 10px;">Llave incorrecta o vencida. Inténtalo de nuevo.</div>
+            <div id="error-msg" style="display: none; color: #ff4a4a; margin-bottom: 15px; font-size: 0.9rem; font-weight: 600;"></div>
             
             <button id="btn-entrar" class="btn-entrar">Verificar Llave</button>
             
@@ -45,54 +130,39 @@
             </div>
         </main>
 
-        <!-- SECCIÓN DE SCRIPTS DE ROBLOX -->
         <section id="scripts" class="projects-section">
             <h2>Scripts Destacados</h2>
             <div class="projects-grid">
-                
-                <!-- Tarjeta Script 1 -->
                 <div class="project-card">
                     <div class="card-icon">🔥</div>
                     <h3>Blox Fruits Auto-Farm</h3>
                     <p>Script optimizado para niveles automáticos, auto-bussiness, teletransportación de islas y recolección de frutas sin lag.</p>
                     <a href="#" class="card-link" onclick="alert('Próximamente: Sistema de copiado de script')">Obtener Script &rarr;</a>
                 </div>
-
-                <!-- Tarjeta Script 2 -->
                 <div class="project-card">
                     <div class="card-icon">🎯</div>
                     <h3>Universal Aimbot & ESP</h3>
                     <p>Compatible con la mayoría de shooters en Roblox (Arsenal, Rivals, Bad Business). Incluye Wallhack, Silent Aim y FOV ajustable.</p>
                     <a href="#" class="card-link" onclick="alert('Próximamente: Sistema de copiado de script')">Obtener Script &rarr;</a>
                 </div>
-
-                <!-- Tarjeta Script 3 -->
                 <div class="project-card">
                     <div class="card-icon">⚡</div>
                     <h3>Brookhaven Mod Menu</h3>
                     <p>Desbloquea todos los pases VIP del juego de forma local: autos premium, casas exclusivas, control de velocidad y animaciones.</p>
                     <a href="#" class="card-link" onclick="alert('Próximamente: Sistema de copiado de script')">Obtener Script &rarr;</a>
                 </div>
-
             </div>
         </section>
 
-        <!-- NUEVA SECCIÓN DE ACTUALIZACIONES DELTA -->
         <section id="updates" class="updates-section">
             <div class="updates-container">
                 <h2>Estado de Delta Roblox</h2>
                 <p class="updates-intro">Monitorea el estado actual y las últimas versiones del exploit Delta para evitar baneos.</p>
-                
                 <div class="status-grid">
                     <div class="status-box online">
                         <h4>Estado de Delta Android</h4>
                         <span class="badge badge-online">🟢 FUNCIONANDO</span>
                         <p class="version-text">Última versión compatible: <strong>v2.645</strong></p>
-                    </div>
-                    <div class="status-box warning">
-                        <h4>Estado de Delta Windows</h4>
-                        <span class="badge badge-warning">🟡 EN MANTENIMIENTO</span>
-                        <p class="version-text">Esperando actualización del parche de Roblox.</p>
                     </div>
                 </div>
             </div>
@@ -102,13 +172,12 @@
             <p>&copy; 2026 DELTA HUB. Diseñado para la comunidad de Roblox.</p>
         </footer>
     </div>
-
     <!-- CDN DE LIBRERÍA DE SUPABASE -->
     <script src="https://jsdelivr.net"></script>
 
     <!-- CONTROL SECURE DE LLAVES DINÁMICAS -->
     <script>
-        const SUPABASE_URL = "https://euxolslvpqsornicoeop.supabase.co";
+        const SUPABASE_URL = "https://supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
         
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -117,16 +186,16 @@
             const tokenGuardado = localStorage.getItem('delta_hub_token');
             
             if (tokenGuardado) {
-                const esValido = await validarLlaveServidor(tokenGuardado);
-                if (esValido) {
-                    document.getElementById('pantalla-bloqueo').style.display = 'none';
+                const esValida = await validarLlaveServidor(tokenGuardado);
+                if (esValida) {
+                    document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
                     document.getElementById('contenido-protegido').style.display = 'block';
                     return;
                 }
             }
             
             localStorage.removeItem('delta_hub_token');
-            document.getElementById('pantalla-bloqueo').style.display = 'flex';
+            document.getElementById('pantalla-bloqueo').style.setProperty('display', 'flex', 'important');
             document.getElementById('contenido-protegido').style.display = 'none';
         }
 
@@ -171,7 +240,7 @@
 
             if (esValida) {
                 localStorage.setItem('delta_hub_token', llaveIngresada);
-                document.getElementById('pantalla-bloqueo').style.display = 'none';
+                document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
                 document.getElementById('contenido-protegido').style.display = 'block';
             } else {
                 errorElemento.textContent = "Llave incorrecta o vencida. Inténtalo de nuevo.";
