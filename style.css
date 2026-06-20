@@ -79,15 +79,16 @@ header nav a:hover::after {
 }
 
 /* ==========================================================================
-   3. SECCIÓN PRINCIPAL (HERO) - IMPACTO VISUAL PREMIUM
+   3. SECCIÓN PRINCIPAL (HERO) - AJUSTADA Y COMPACTA PARA MÓVILES
    ========================================================================= */
 .hero {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12rem 10% 8rem 10%; 
-    margin-top: 40px;
+    /* Reducido significativamente: antes 12rem arriba y 8rem abajo */
+    padding: 7rem 5% 3rem 5%; 
+    margin-top: 10px;
     background: 
         radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.15), transparent 50%),
         radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1), transparent 50%),
@@ -99,12 +100,12 @@ header nav a:hover::after {
 .hero::before {
     content: '';
     position: absolute;
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
     background: #38bdf8;
-    filter: blur(150px);
-    opacity: 0.15;
-    top: 30%;
+    filter: blur(120px);
+    opacity: 0.12;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
@@ -112,27 +113,27 @@ header nav a:hover::after {
 
 .hero-content {
     text-align: center;
-    max-width: 800px;
+    max-width: 750px;
     z-index: 2;
 }
 
 .hero-content h1 {
-    font-size: 3.5rem; 
+    font-size: 2.2rem; /* Más compacto para pantallas pequeñas (Antes 3.5rem) */
     font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 1.8rem;
-    letter-spacing: -1px;
-    background: linear-gradient(to right, #ffffff 30%, #38bdf8, #06b6d4);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+    background: linear-gradient(to right, #ffffff 40%, #38bdf8, #06b6d4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .hero-content p {
-    font-size: 1.2rem;
+    font-size: 1rem; /* Más compacto y directo (Antes 1.2rem) */
     color: #94a3b8;
-    margin-bottom: 3rem;
-    line-height: 1.7;
-    max-width: 650px;
+    margin-bottom: 1.8rem; /* Menor espacio antes del botón */
+    line-height: 1.5;
+    max-width: 550px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -144,7 +145,7 @@ header nav a:hover::after {
     display: inline-block;
     background: linear-gradient(135deg, #38bdf8, #06b6d4); 
     color: #0f172a;
-    padding: 1rem 2.5rem;
+    padding: 0.8rem 2rem; /* Botón ligeramente más estilizado y menos gigante */
     border-radius: 50px;
     font-weight: 700;
     text-decoration: none;
@@ -154,24 +155,24 @@ header nav a:hover::after {
 }
 
 .btn-primary:hover {
-    transform: translateY(-4px); 
-    box-shadow: 0 12px 30px rgba(56, 189, 248, 0.6); 
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 25px rgba(56, 189, 248, 0.5); 
     filter: brightness(1.1); 
 }
 /* ==========================================================================
    5. SECCIÓN DE SCRIPTS (TARJETAS DE ROBLOX)
    ========================================================================== */
 .projects-section {
-    padding: 6rem 10%;
+    padding: 4rem 5%; /* Reducido espaciado general para acercar el contenido */
     background-color: #0b1329; 
     text-align: center;
     border-top: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 .projects-section h2 {
-    font-size: 2.5rem;
+    font-size: 2rem; /* Un poco más pequeño y estilizado (Antes 2.5rem) */
     font-weight: 800;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem; /* Reduce la separación con las tarjetas */
     position: relative;
     display: inline-block;
     color: #f8fafc;
@@ -183,71 +184,71 @@ header nav a:hover::after {
     width: 60%;
     height: 4px;
     background: linear-gradient(to right, #38bdf8, #06b6d4);
-    bottom: -16px;
+    bottom: -12px;
     left: 20%;
     border-radius: 10px;
 }
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; /* Espacio más compacto entre cada tarjeta de script */
 }
 
 .project-card {
     background: rgba(30, 41, 59, 0.4); 
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    padding: 3rem 2.2rem;
-    border-radius: 20px; 
+    padding: 2rem 1.8rem; /* Compactada la tarjeta internamente */
+    border-radius: 16px; 
     text-align: left;
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .project-card:hover {
-    transform: translateY(-12px); 
+    transform: translateY(-8px); 
     border-color: rgba(56, 189, 248, 0.4); 
     background: rgba(30, 41, 59, 0.7);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(56, 189, 248, 0.1);
 }
 
 .card-icon {
-    font-size: 2.8rem;
-    margin-bottom: 1.8rem;
+    font-size: 2.2rem; /* Iconos un poco más moderados */
+    margin-bottom: 1.2rem;
     display: inline-block;
     transition: transform 0.3s ease;
 }
 
 .project-card:hover .card-icon {
-    transform: translateY(-5px) scale(1.1); 
+    transform: translateY(-3px) scale(1.08); 
 }
 
 .project-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
     color: #f8fafc;
 }
 
 .project-card p {
     color: #94a3b8;
-    font-size: 1rem;
-    line-height: 1.65;
-    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
 }
 
 .card-link {
     color: #38bdf8;
     text-decoration: none;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     display: inline-block;
     transition: all 0.3s ease;
 }
 
 .project-card:hover .card-link {
-    transform: translateX(5px);
+    transform: translateX(4px);
     color: #06b6d4;
 }
 
@@ -255,28 +256,28 @@ header nav a:hover::after {
    6. SECCIÓN DE ACTUALIZACIONES (ESTADO DE DELTA EXECUTOR)
    ========================================================================== */
 .updates-section {
-    padding: 6rem 10%;
+    padding: 4rem 5%;
     background-color: #0f172a;
     text-align: center;
 }
 
 .updates-section h2 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     color: #f8fafc;
 }
 
 .updates-intro {
     color: #94a3b8;
-    margin-bottom: 4rem;
-    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
 }
 
 .status-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: 1.5rem;
     justify-content: center;
     max-width: 900px;
     margin: 0 auto;
@@ -285,7 +286,7 @@ header nav a:hover::after {
 .status-box {
     background: #1e293b;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 2.5rem 2rem;
+    padding: 2rem 1.8rem;
     border-radius: 16px;
     flex: 1;
     min-width: 280px;
@@ -295,28 +296,27 @@ header nav a:hover::after {
 }
 
 .status-box:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
 }
 
 .status-box h4 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
+    font-size: 1.15rem;
+    margin-bottom: 0.8rem;
     color: #f8fafc;
 }
 
-/* Etiquetas e iluminación de estado */
 .badge {
     display: inline-block;
-    padding: 0.4rem 1rem;
+    padding: 0.3rem 0.8rem;
     border-radius: 50px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 1px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
 }
 
 .status-box.online {
-    border-left: 4px solid #22c55e; /* Borde verde */
+    border-left: 4px solid #22c55e;
 }
 
 .status-box.online:hover {
@@ -330,7 +330,7 @@ header nav a:hover::after {
 }
 
 .status-box.warning {
-    border-left: 4px solid #eab308; /* Borde amarillo */
+    border-left: 4px solid #eab308;
 }
 
 .status-box.warning:hover {
@@ -345,7 +345,7 @@ header nav a:hover::after {
 
 .version-text {
     color: #94a3b8;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .version-text strong {
@@ -357,9 +357,9 @@ header nav a:hover::after {
    ========================================================================== */
 footer {
     text-align: center;
-    padding: 3rem;
+    padding: 2.5rem;
     color: #64748b;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     background-color: #0b1329;
     border-top: 1px solid rgba(255, 255, 255, 0.03);
 }
