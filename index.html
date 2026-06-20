@@ -3,335 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delta Hub - Roblox Scripts & Updates</title>
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-
-    <!-- ARQUITECTURA DE ESTILOS INMUNE A CONGELAMIENTOS -->
+    <title>Delta Scripts Roblox</title>
     <style>
-        #pantalla-bloqueo {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            background: radial-gradient(circle at 50% 50%, #1e293b, #0f172a) !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            z-index: 999999 !important;
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
         }
-
-        .bloqueo-card {
-            background: rgba(30, 41, 59, 0.75) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            padding: 3rem 2rem !important;
-            border-radius: 24px !important;
-            width: 90% !important;
-            max-width: 440px !important;
-            text-align: center !important;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6) !important;
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
         }
-
-        .bloqueo-card h2 {
-            font-size: 1.8rem !important;
-            font-weight: 800 !important;
-            margin-bottom: 0.8rem !important;
-            color: #ffffff !important;
-            background: none !important;
-            -webkit-text-fill-color: initial !important;
-            letter-spacing: -0.5px !important;
-        }
-
-        .bloqueo-card p {
-            font-size: 0.95rem !important;
-            color: #94a3b8 !important;
-            line-height: 1.6 !important;
-            margin-bottom: 2rem !important;
-        }
-
-        .input-llave {
-            width: 100% !important;
-            padding: 1rem 1.2rem !important;
-            background: #0f172a !important;
-            border: 2px solid rgba(255, 255, 255, 0.05) !important;
-            border-radius: 14px !important;
-            color: #ffffff !important;
-            font-family: inherit !important;
-            font-weight: 700 !important;
-            font-size: 1.1rem !important;
-            text-align: center !important;
-            outline: none !important;
-            margin-bottom: 1.2rem !important;
-            transition: all 0.3s ease !important;
-            letter-spacing: 2px !important;
-        }
-
-        .input-llave:focus {
-            border-color: #38bdf8 !important;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.25) !important;
-            background: #111e36 !important;
-        }
-
-        .btn-entrar {
-            width: 100% !important;
-            background: linear-gradient(135deg, #38bdf8, #06b6d4) !important;
-            color: #0f172a !important;
-            border: none !important;
-            padding: 1rem !important;
-            border-radius: 14px !important;
-            font-size: 1rem !important;
-            font-weight: 800 !important;
-            cursor: pointer !important;
-            display: block !important;
-            transition: all 0.3s ease !important;
-            letter-spacing: 0.5px !important;
-        }
-
-        .btn-entrar:hover {
-            transform: translateY(-2px) !important;
-            filter: brightness(1.1) !important;
-            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4) !important;
-        }
-
-        .btn-entrar:disabled {
-            background: #475569 !important;
-            color: #94a3b8 !important;
-            cursor: not-allowed !important;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-
-        .btn-obtener {
-            display: inline-block !important;
-            color: #38bdf8 !important;
-            text-decoration: none !important;
-            font-size: 0.9rem !important;
-            font-weight: 700 !important;
-            margin-top: 1.5rem !important;
-            transition: color 0.3s ease !important;
-        }
-
-        .btn-obtener:hover {
-            color: #06b6d4 !important;
-            text-decoration: underline !important;
-        }
-
-        .error-notification {
-            background: rgba(239, 68, 68, 0.1) !important;
-            border: 1px solid rgba(239, 68, 68, 0.2) !important;
-            color: #f87171 !important;
-            padding: 0.8rem 1rem !important;
-            border-radius: 12px !important;
-            font-size: 0.9rem !important;
-            font-weight: 600 !important;
-            margin-bottom: 1.2rem !important;
-            text-align: left !important;
-        }
+        h1 { color: #00ff88; }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA DE BLOQUEO CON LLAVE -->
-    <div id="pantalla-bloqueo">
-        <div class="bloqueo-card">
-            <h2>🔒 Acceso Restringido</h2>
-            <p>Introduce la llave de acceso válida por 24 horas para continuar hacia el sitio.</p>
-            
-            <div id="error-box" class="error-notification" style="display: none;"></div>
-
-            <input type="text" id="input-llave" class="input-llave" placeholder="DELTA2026">
-            
-            <button id="btn-entrar" class="btn-entrar">Verificar Llave</button>
-            
-            <a href="https://discord.gg/Rj5DKe7MV" target="_blank" class="btn-obtener">💬 Conseguir llave en Discord</a>
-        </div>
+    <div class="container">
+        <h1>Delta Scripts Hub</h1>
+        <p>Tu página web está conectada exitosamente a Firebase.</p>
     </div>
 
-    <!-- CONTENIDO PROTEGIDO -->
-    <div id="contenido-protegido" style="display: none;">
-        <header>
-            <div class="logo">DELTA HUB</div>
-            <nav>
-                <a href="#">Inicio</a>
-                <a href="#scripts">Scripts</a>
-                <a href="#updates">Actualizaciones Delta</a>
-            </nav>
-        </header>
+    <!-- CONFIGURACIÓN OFICIAL DE GOOGLE FIREBASE -->
+    <script type="module">
+        // Importamos las librerías web oficiales directamente de Google
+        import { initializeApp } from "https://gstatic.com";
+        import { getFirestore } from "https://gstatic.com";
 
-        <main class="hero">
-            <div class="hero-content">
-                <h1>Los mejores Scripts para Roblox con Delta Executor.</h1>
-                <p>Explora nuestra librería de scripts optimizados, seguros y completamente actualizados para dominar tus juegos favoritos.</p>
-                <a href="#scripts" class="btn-primary">Ver Scripts Disponibles</a>
-            </div>
-        </main>
+        // Tus credenciales reales de deltascripts-1
+        const firebaseConfig = {
+            apiKey: "AIzaSyCyxJWklgJAAMwmhSw9jF3CMsJXbF99CeA",
+            authDomain: "://firebaseapp.com",
+            projectId: "deltascripts-1",
+            storageBucket: "deltascripts-1.firebasestorage.app",
+            messagingSenderId: "735316669110",
+            appId: "1:735316669110:web:33f580d583a462ee2cac17",
+            measurementId: "G-90E1DSBCWY"
+        };
 
-        <section id="scripts" class="projects-section">
-            <h2>Scripts Destacados</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="card-icon">🔥</div>
-                    <h3>Blox Fruits Auto-Farm</h3>
-                    <p>Script optimizado para niveles automáticos, auto-bussiness, teletransportación de islas y recolección de frutas sin lag.</p>
-                    <a href="#" class="card-link" onclick="alert('Próximamente: Sistema de copiado de script')">Obtener Script &rarr;</a>
-                </div>
-                <div class="project-card">
-                    <div class="card-icon">🎯</div>
-                    <h3>Universal Aimbot & ESP</h3>
-                    <p>Compatible con la mayoría de shooters en Roblox (Arsenal, Rivals, Bad Business). Incluye Wallhack, Silent Aim y FOV ajustable.</p>
-                    <a href="#" class="card-link" onclick="alert('Próximamente: Sistema de copiado de script')">Obtener Script &rarr;</a>
-                </div>
-                <div class="project-card">
-                    <div class="card-icon">⚡</div>
-                    <h3>Brookhaven Mod Menu</h3>
-                    <p>Desbloquea todos los pases VIP del juego de forma local: autos premium, casas exclusivas, control de velocidad y animaciones.</p>
-                    <a href="#" class="card-link" onclick="alert('Próximamente: Sistema de copiado de script')">Obtener Script &rarr;</a>
-                </div>
-            </div>
-        </section>
+        // Inicializar Firebase en tu web
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        <section id="updates" class="updates-section">
-            <div class="updates-container">
-                <h2>Estado de Delta Roblox</h2>
-                <p class="updates-intro">Monitorea el estado actual y las últimas versiones del exploit Delta para evitar baneos.</p>
-                <div class="status-grid">
-                    <div class="status-box online">
-                        <h4>Estado de Delta Android</h4>
-                        <span class="badge badge-online">🟢 FUNCIONANDO</span>
-                        <p class="version-text">Última versión compatible: <strong>v2.645</strong></p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        console.log("¡Firebase conectado con éxito en deltascripts-1!");
+    </script>
 
-        <footer>
-            <p>&copy; 2026 DELTA HUB. Diseñado para la comunidad de Roblox.</p>
-        </footer>
-    </div>
-    <!-- NÚCLEO ASÍNCRONO DE CONTROL SUPABASE CORREGIDO Y PROBADO -->
-<script type="module">
-    import { createClient } from 'https://jsdelivr.net'
-
-    const SUPABASE_URL = "https://euxolslvpqsornicoeop.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
-    
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function verificarAccesoInicial() {
-        const tokenLocal = localStorage.getItem('delta_hub_token');
-        if (tokenLocal) {
-            const validacion = await procesarVerificacionServidor(tokenLocal);
-            if (validacion === true) {
-                permitirIngreso();
-                return;
-            }
-        }
-        denegarIngreso();
-    }
-
-    async function procesarVerificacionServidor(token) {
-        try {
-            const { data, error } = await supabaseClient
-                .from('llaves_acceso')
-                .select('creado_en')
-                .eq('clave', token);
-
-            if (error) return `Error de base de datos: ${error.message}`;
-            
-            // CORRECCIÓN: Supabase siempre devuelve una lista, verificamos si está vacía
-            if (!data || data.length === 0) {
-                return "La llave introducida no existe o es inválida.";
-            }
-
-            // CORRECCIÓN EXTRA: Mapeo del índice cero de forma segura para obtener la fecha
-            const registro = data[0];
-            if (!registro || !registro.creado_en) {
-                return "Error al leer los datos de la llave.";
-            }
-
-            const fechaCreacion = new Date(registro.creado_en).getTime();
-            const momentoActual = new Date().getTime();
-            const limiteVeinticuatroHoras = 24 * 60 * 60 * 1000;
-
-            // Validación de formato de fecha
-            if (isNaN(fechaCreacion)) {
-                return "El formato de fecha en la base de datos es incorrecto.";
-            }
-
-            if ((momentoActual - fechaCreacion) > limiteVeinticuatroHoras) {
-                return "Esta llave ha expirado. Su validez máxima es de 24 horas.";
-            }
-
-            return true; 
-        } catch (fail) {
-            return `Fallo crítico de comunicación: ${fail.message}`;
-        }
-    }
-
-    function permitirIngreso() {
-        const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
-        const contenidoProtegido = document.getElementById('contenido-protegido');
-        if (pantallaBloqueo) pantallaBloqueo.style.setProperty('display', 'none', 'important');
-        if (contenidoProtegido) contenidoProtegido.style.display = 'block';
-    }
-
-    function denegarIngreso() {
-        localStorage.removeItem('delta_hub_token');
-        const pantallaBloqueo = document.getElementById('pantalla-bloqueo');
-        const contenidoProtegido = document.getElementById('contenido-protegido');
-        if (pantallaBloqueo) pantallaBloqueo.style.setProperty('display', 'flex', 'important');
-        if (contenidoProtegido) contenidoProtegido.style.display = 'none';
-    }
-
-    // Vinculación segura de eventos tras la carga del árbol DOM
-    document.addEventListener('DOMContentLoaded', () => {
-        const btnEntrar = document.getElementById('btn-entrar');
-        if (btnEntrar) {
-            btnEntrar.onclick = async function(e) {
-                e.preventDefault(); // Previene recargas accidentales si es un formulario
-                
-                const inputElemento = document.getElementById('input-llave');
-                const errorBox = document.getElementById('error-box');
-                const llaveIngresada = inputElemento ? inputElemento.value.trim() : "";
-
-                if (errorBox) errorBox.style.display = 'none';
-
-                if (!llaveIngresada) {
-                    if (errorBox) {
-                        errorBox.textContent = "Por favor, introduce una llave de acceso.";
-                        errorBox.style.display = 'block';
-                    }
-                    return;
-                }
-
-                this.innerText = "Procesando...";
-                this.disabled = true;
-
-                const respuesta = await procesarVerificacionServidor(llaveIngresada);
-
-                if (respuesta === true) {
-                    localStorage.setItem('delta_hub_token', llaveIngresada);
-                    permitirIngreso();
-                } else {
-                    if (errorBox) {
-                        errorBox.textContent = respuesta;
-                        errorBox.style.display = 'block';
-                    }
-                    denegarIngreso();
-                }
-
-                this.innerText = "Verificar Llave";
-                this.disabled = false;
-            };
-        }
-
-        // Ejecutar flujo de validación inicial
-        verificarAccesoInicial();
-    });
-</script>
+</body>
+</html>
