@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delta Scripts Roblox</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- SDK Oficial de Firebase unificado para navegadores modernos sin usar módulos -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
 </head>
 <body>
 
@@ -12,19 +16,14 @@
         <h1>Delta Scripts Hub</h1>
         <p>Tu catálogo de scripts para Roblox.</p>
         
-        <!-- Aquí se forzará la carga de los scripts -->
+        <!-- Zona de carga dinámica -->
         <div id="contenedor-principal">
             <div class="status" id="db-status">Iniciando conexión segura...</div>
         </div>
     </div>
 
-    <!-- SISTEMA DE IMPORTACIÓN MODERNO 2026 -->
-    <script type="module">
-        // Importamos directamente el módulo listo para usar
-        import { initializeApp } from "https://gstatic.com";
-        import { getFirestore, collection, getDocs } from "https://gstatic.com";
-
-        // Tus credenciales reales de deltascripts-1
+    <script>
+        // Tus credenciales reales verificadas del proyecto deltascripts-1
         const firebaseConfig = {
             apiKey: "AIzaSyCyxJWklgJAAMwmhSw9jF3CMsJXbF99CeA",
             authDomain: "://firebaseapp.com",
@@ -35,47 +34,55 @@
             measurementId: "G-90E1DSBCWY"
         };
 
-        async function conectarFirebase() {
+        // Función de arranque seguro e inmediato
+        (function() {
             const statusElemento = document.getElementById('db-status');
             const contenedor = document.getElementById('contenedor-principal');
 
-            try {
-                // 1. Inicializar la app con sus credenciales
-                const app = initializeApp(firebaseConfig);
-                const db = getFirestore(app);
-                
-                statusElemento.innerText = "Conectado. Descargando tus scripts...";
-
-                // 2. Traer los scripts de la colección
-                const respuesta = await getDocs(collection(db, "scripts"));
-                
-                if (respuesta.empty) {
-                    contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Conectado a Firebase, pero tu colección 'scripts' está vacía. Añade un documento en tu panel de Google.</div>";
-                    return;
-                }
-
-                // 3. Mostrar los scripts en tarjetas web
-                contenedor.innerHTML = "";
-                respuesta.forEach((doc) => {
-                    const item = doc.data();
-                    contenedor.innerHTML += `
-                        <div style="background: #161622; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #2a2a3a;">
-                            <h3 style="color: #00ff88; margin: 0 0 10px 0; font-size: 1.3rem;">${item.nombre || 'Script sin nombre'}</h3>
-                            <pre style="background: #000; color: #00ff88; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; border: 1px solid #111;"><code>${item.contenido || '-- Vacío'}</code></pre>
-                        </div>
-                    `;
-                });
-
-            } catch (error) {
+            if (typeof firebase === 'undefined') {
                 statusElemento.style.background = "#331111";
                 statusElemento.style.color = "#ff4444";
-                statusElemento.style.border = "1px solid #ff4444";
-                statusElemento.innerText = "Error de Firebase: " + error.message;
+                statusElemento.innerText = "Error: Google Firebase no pudo ser descargado por tu navegador. Intenta recargar la página.";
+                return;
             }
-        }
 
-        // Arrancar el proceso automáticamente
-        conectarFirebase();
+            try {
+                // Inicializar Firebase globalmente
+                firebase.initializeApp(firebaseConfig);
+                const db = firebase.firestore();
+                
+                statusElemento.innerText = "Conectado con éxito. Buscando tus scripts...";
+
+                // Consultar la base de datos de manera directa
+                db.collection("scripts").get().then((respuesta) => {
+                    if (respuesta.empty) {
+                        contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Conectado a Firebase, pero tu colección 'scripts' está vacía en el panel de Google.</div>";
+                        return;
+                    }
+
+                    // Limpiar pantalla y renderizar las tarjetas de scripts encontrados
+                    contenedor.innerHTML = "";
+                    respuesta.forEach((doc) => {
+                        const item = doc.data();
+                        contenedor.innerHTML += `
+                            <div style="background: #161622; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #2a2a3a;">
+                                <h3 style="color: #00ff88; margin: 0 0 10px 0; font-size: 1.3rem;">${item.nombre || 'Script sin nombre'}</h3>
+                                <pre style="background: #000; color: #00ff88; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; border: 1px solid #111;"><code>${item.contenido || '-- Vacío'}</code></pre>
+                            </div>
+                        `;
+                    });
+                }).catch((errorReglas) => {
+                    statusElemento.style.background = "#331111";
+                    statusElemento.style.color = "#ff4444";
+                    statusElemento.innerText = "Bloqueo de seguridad de Firebase: " + errorReglas.message;
+                });
+
+            } catch (errorArranque) {
+                statusElemento.style.background = "#331111";
+                statusElemento.style.color = "#ff4444";
+                statusElemento.innerText = "Error de inicialización: " + errorArranque.message;
+            }
+        })();
     </script>
 
 </body>
