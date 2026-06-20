@@ -9,7 +9,7 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
-    <!-- ESTILOS INTEGRADOS NATIVOS PARA EVITAR LA PANTALLA NEGRA -->
+    <!-- ESTILOS INTERNOS INTEGRADOS PARA ROMPER LA PANTALLA NEGRA -->
     <style>
         #pantalla-bloqueo {
             position: fixed !important;
@@ -17,8 +17,8 @@
             left: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
-            background: #0f172a !important; /* Fondo premium oscuro garantizado */
-            display: flex !important; /* Fuerza a mostrar la tarjeta de inmediato */
+            background: #0f172a !important; /* Fondo premium oscuro real */
+            display: flex !important; /* Obliga a renderizar la tarjeta en pantalla al instante */
             justify-content: center !important;
             align-items: center !important;
             z-index: 999999 !important;
@@ -32,7 +32,7 @@
             width: 90% !important;
             max-width: 420px !important;
             text-align: center !important;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
         }
 
         .bloqueo-card h2 {
@@ -40,6 +40,8 @@
             font-weight: 800 !important;
             margin-bottom: 0.8rem !important;
             color: #ffffff !important;
+            background: none !important;
+            -webkit-text-fill-color: initial !important;
         }
 
         .bloqueo-card p {
@@ -73,6 +75,7 @@
             font-size: 1rem !important;
             font-weight: 700 !important;
             cursor: pointer !important;
+            display: block !important;
         }
 
         .btn-obtener {
@@ -94,7 +97,7 @@
             <p>Introduce la llave de acceso válida por 24 horas para continuar hacia el sitio.</p>
             
             <input type="text" id="input-llave" class="input-llave" placeholder="PEGA LA LLAVE AQUÍ">
-            <div id="error-msg" style="display: none; color: #ff4a4a; margin-bottom: 15px; font-size: 0.9rem; font-weight: 600;">Llave incorrecta o vencida.</div>
+            <div id="error-msg" style="display: none; color: #ff4a4a; margin-bottom: 15px; font-size: 0.9rem; font-weight: 600;"></div>
             
             <button id="btn-entrar" class="btn-entrar">Verificar Llave</button>
             
@@ -163,40 +166,31 @@
             <p>&copy; 2026 DELTA HUB. Diseñado para la comunidad de Roblox.</p>
         </footer>
     </div>
-    <!-- CDN DE LIBRERÍA DE SUPABASE -->
-    <script src="https://jsdelivr.net"></script>
+    <!-- SE TRASLADÓ LA CARGA DE SUPABASE A UN MÓDULO ASÍNCRONO PARA EVITAR CONGELAMIENTOS -->
+    <script type="module">
+        import { createClient } from 'https://jsdelivr.net';
 
-    <!-- CONTROL SECURE ANTIBLOQUEO -->
-    <script>
         const SUPABASE_URL = "https://supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
         
-        let supabaseClient = null;
-
-        // Intentamos arrancar Supabase de forma segura sin romper la página
-        try {
-            if (typeof Supabase !== 'undefined') {
-                supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
-        } catch (err) {
-            console.error("No se pudo iniciar Supabase debido a restricciones de red o CDN:", err);
-        }
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function verificarAcceso() {
             const tokenGuardado = localStorage.getItem('delta_hub_token');
-            
-            if (tokenGuardado && supabaseClient) {
+            if (tokenGuardado) {
                 const esValida = await validarLlaveServidor(tokenGuardado);
                 if (esValida) {
-                    mostrarSitio();
+                    document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
+                    document.getElementById('contenido-protegido').style.display = 'block';
                     return;
                 }
             }
-            ocultarSitio();
+            localStorage.removeItem('delta_hub_token');
+            document.getElementById('pantalla-bloqueo').style.setProperty('display', 'flex', 'important');
+            document.getElementById('contenido-protegido').style.display = 'none';
         }
 
         async function validarLlaveServidor(token) {
-            if (!supabaseClient) return false;
             try {
                 const { data, error } = await supabaseClient
                     .from('llaves_acceso')
@@ -212,20 +206,9 @@
 
                 return (ahora - fechaCreacion) < veinticuatroHoras;
             } catch (err) {
-                console.error("Error al consultar base de datos:", err);
+                console.error("Error consultando llaves:", err);
                 return false;
             }
-        }
-
-        function mostrarSitio() {
-            document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
-            document.getElementById('contenido-protegido').style.display = 'block';
-        }
-
-        function ocultarSitio() {
-            localStorage.removeItem('delta_hub_token');
-            document.getElementById('pantalla-bloqueo').style.setProperty('display', 'flex', 'important');
-            document.getElementById('contenido-protegido').style.display = 'none';
         }
 
         document.getElementById('btn-entrar').onclick = async function() {
@@ -236,13 +219,7 @@
             errorElemento.style.display = 'none';
 
             if (!llaveIngresada) {
-                errorElemento.textContent = "Por favor, escribe una llave.";
-                errorElemento.style.display = 'block';
-                return;
-            }
-
-            if (!supabaseClient) {
-                errorElemento.textContent = "Error: No hay conexión con el servidor de llaves.";
+                errorElemento.textContent = "Por favor, introduce una llave.";
                 errorElemento.style.display = 'block';
                 return;
             }
@@ -254,18 +231,19 @@
 
             if (esValida) {
                 localStorage.setItem('delta_hub_token', llaveIngresada);
-                mostrarSitio();
+                document.getElementById('pantalla-bloqueo').style.setProperty('display', 'none', 'important');
+                document.getElementById('contenido-protegido').style.display = 'block';
             } else {
                 errorElemento.textContent = "Llave incorrecta o vencida. Inténtalo de nuevo.";
                 errorElemento.style.display = 'block';
-                ocultarSitio();
+                localStorage.removeItem('delta_hub_token');
             }
 
             this.innerText = "Verificar Llave";
             this.disabled = false;
         };
 
-        // Ejecución inmediata
+        // Ejecutar de inmediato de fondo
         verificarAcceso();
     </script>
 </body>
