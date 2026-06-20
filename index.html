@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delta Scripts Roblox</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- SDK Oficial de Firebase unificado para navegadores modernos sin usar módulos -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
 </head>
 <body>
 
@@ -18,71 +14,59 @@
         
         <!-- Zona de carga dinámica -->
         <div id="contenedor-principal">
-            <div class="status" id="db-status">Iniciando conexión segura...</div>
+            <div class="status" id="db-status">Conectando con el servidor seguro...</div>
         </div>
     </div>
 
     <script>
-        // Tus credenciales reales verificadas del proyecto deltascripts-1
-        const firebaseConfig = {
-            apiKey: "AIzaSyCyxJWklgJAAMwmhSw9jF3CMsJXbF99CeA",
-            authDomain: "://firebaseapp.com",
-            projectId: "deltascripts-1",
-            storageBucket: "deltascripts-1.firebasestorage.app",
-            messagingSenderId: "735316669110",
-            appId: "1:735316669110:web:33f580d583a462ee2cac17",
-            measurementId: "G-90E1DSBCWY"
-        };
+        // Sistema de conexión directa mediante API sin usar librerías externas de Google
+        const PROJECT_ID = "deltascripts-1";
+        const statusElemento = document.getElementById('db-status');
+        const contenedor = document.getElementById('contenedor-principal');
 
-        // Función de arranque seguro e inmediato
-        (function() {
-            const statusElemento = document.getElementById('db-status');
-            const contenedor = document.getElementById('contenedor-principal');
-
-            if (typeof firebase === 'undefined') {
-                statusElemento.style.background = "#331111";
-                statusElemento.style.color = "#ff4444";
-                statusElemento.innerText = "Error: Google Firebase no pudo ser descargado por tu navegador. Intenta recargar la página.";
-                return;
-            }
-
+        async function cargarScriptsDirecto() {
             try {
-                // Inicializar Firebase globalmente
-                firebase.initializeApp(firebaseConfig);
-                const db = firebase.firestore();
+                // Hacemos una petición directa a la API de tu base de datos de Firebase
+                const url = `https://googleapis.com{PROJECT_ID}/databases/(default)/documents/scripts`;
+                const respuesta = await fetch(url);
                 
-                statusElemento.innerText = "Conectado con éxito. Buscando tus scripts...";
+                if (!respuesta.ok) {
+                    throw new Error("No se pudo obtener respuesta de la base de datos.");
+                }
 
-                // Consultar la base de datos de manera directa
-                db.collection("scripts").get().then((respuesta) => {
-                    if (respuesta.empty) {
-                        contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Conectado a Firebase, pero tu colección 'scripts' está vacía en el panel de Google.</div>";
-                        return;
-                    }
+                const datos = await respuesta.json();
 
-                    // Limpiar pantalla y renderizar las tarjetas de scripts encontrados
-                    contenedor.innerHTML = "";
-                    respuesta.forEach((doc) => {
-                        const item = doc.data();
-                        contenedor.innerHTML += `
-                            <div style="background: #161622; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #2a2a3a;">
-                                <h3 style="color: #00ff88; margin: 0 0 10px 0; font-size: 1.3rem;">${item.nombre || 'Script sin nombre'}</h3>
-                                <pre style="background: #000; color: #00ff88; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; border: 1px solid #111;"><code>${item.contenido || '-- Vacío'}</code></pre>
-                            </div>
-                        `;
-                    });
-                }).catch((errorReglas) => {
-                    statusElemento.style.background = "#331111";
-                    statusElemento.style.color = "#ff4444";
-                    statusElemento.innerText = "Bloqueo de seguridad de Firebase: " + errorReglas.message;
+                // Si la colección no tiene documentos guardados
+                if (!datos.documents || datos.documents.length === 0) {
+                    contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Conectado a Firebase, pero tu colección 'scripts' está vacía en el panel de Google.</div>";
+                    return;
+                }
+
+                // Limpiamos la pantalla y dibujamos tus scripts de Roblox
+                contenedor.innerHTML = "";
+                datos.documents.forEach((doc) => {
+                    const campos = doc.fields;
+                    // Extraemos las variables 'nombre' y 'contenido' que creaste en Firebase
+                    const nombreScript = campos.nombre && campos.nombre.stringValue ? campos.nombre.stringValue : 'Script sin nombre';
+                    const contenidoScript = campos.contenido && campos.contenido.stringValue ? campos.contenido.stringValue : '-- Vacío';
+
+                    contenedor.innerHTML += `
+                        <div style="background: #161622; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #2a2a3a;">
+                            <h3 style="color: #00ff88; margin: 0 0 10px 0; font-size: 1.3rem;">${nombreScript}</h3>
+                            <pre style="background: #000; color: #00ff88; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; border: 1px solid #111;"><code>${contenidoScript}</code></pre>
+                        </div>
+                    `;
                 });
 
-            } catch (errorArranque) {
+            } catch (error) {
                 statusElemento.style.background = "#331111";
                 statusElemento.style.color = "#ff4444";
-                statusElemento.innerText = "Error de inicialización: " + errorArranque.message;
+                statusElemento.innerText = "Error de conexión directa: " + error.message;
             }
-        })();
+        }
+
+        // Arrancar la descarga de inmediato
+        cargarScriptsDirecto();
     </script>
 
 </body>
