@@ -6,7 +6,7 @@
     <title>Delta Scripts Roblox</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Estilos rápidos para las tarjetas de tus scripts */
+        /* Estilos visuales exactos para las tarjetas de tus scripts */
         .script-card {
             background: #161622; 
             padding: 20px; 
@@ -51,23 +51,81 @@
         <h1>Delta Scripts Hub</h1>
         <p>Tu catálogo de scripts para Roblox.</p>
         
-        <!-- Tarjeta del Script 1 (Puedes cambiar este texto por tus scripts reales) -->
-        <div class="script-card">
-            <h3 class="script-title">🚀 Delta Executor Auto-Farm</h3>
-            <div class="script-box" id="script1">loadstring(game:HttpGet("https://githubusercontent.com"))()</div>
-            <button class="btn-copy" onclick="copiarScript('script1')">Copiar Script</button>
-        </div>
+        <!-- Cuadro indicador del estado de Firebase -->
+        <div class="status" id="db-status">Iniciando Firebase...</div>
 
-        <!-- Tarjeta del Script 2 -->
-        <div class="script-card">
-            <h3 class="script-title">🛡️ Fly & Noclip Hack</h3>
-            <div class="script-box" id="script2">loadstring(game:HttpGet("https://githubusercontent.com"))()</div>
-            <button class="btn-copy" onclick="copiarScript('script2')">Copiar Script</button>
-        </div>
+        <!-- En este contenedor se dibujarán tus scripts reales de forma automática -->
+        <div id="contenedor-scripts"></div>
     </div>
 
+    <!-- CARGA DE LIBRERÍAS COMPATIBLES DE GOOGLE (SIN ERRORES DE IMPORTACIÓN) -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+
     <script>
-        // Función rápida para que tus usuarios copien el script con un botón
+        // Tus credenciales 100% completas y corregidas de deltascripts-1
+        const firebaseConfig = {
+            apiKey: "AIzaSyCyxJWklgJAAMwmhSw9jF3CMsJXbF99CeA",
+            authDomain: "deltascripts-1.firebaseapp.com",
+            projectId: "deltascripts-1",
+            storageBucket: "deltascripts-1.firebasestorage.app",
+            messagingSenderId: "735316669110",
+            appId: "1:735316669110:web:33f580d583a462ee2cac17",
+            measurementId: "G-90E1DSBCWY"
+        };
+
+        // Encendido automático del sistema
+        try {
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.firestore();
+            const statusElemento = document.getElementById('db-status');
+            const contenedor = document.getElementById('contenedor-scripts');
+
+            statusElemento.innerText = "Conectado. Cargando scripts desde Firebase...";
+
+            // Consultar tu colección de Google llamada "scripts"
+            db.collection("scripts").get().then((respuesta) => {
+                
+                if (respuesta.empty) {
+                    statusElemento.innerText = "Conectado a Firebase.";
+                    contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Tu colección 'scripts' está vacía en Firebase. Agrega un documento en tu panel de Google.</div>";
+                    return;
+                }
+
+                // Si todo sale bien, ocultamos el aviso de carga e iniciamos el dibujo
+                statusElemento.style.display = "none";
+                contenedor.innerHTML = "";
+
+                let contador = 0;
+                respuesta.forEach((doc) => {
+                    contador++;
+                    const item = doc.data();
+                    const idUnico = "script-code-" + contador;
+                    const nombre = item.nombre || "Script sin nombre";
+                    const contenido = item.contenido || "-- Vacío";
+
+                    // Insertamos la tarjeta de cada script que tengas guardado
+                    contenedor.innerHTML += `
+                        <div class="script-card">
+                            <h3 class="script-title">🚀 ${nombre}</h3>
+                            <div class="script-box" id="${idUnico}">${contenido}</div>
+                            <button class="btn-copy" onclick="copiarScript('${idUnico}')">Copiar Script</button>
+                        </div>
+                    `;
+                });
+
+            }).catch((errorReglas) => {
+                statusElemento.style.background = "#331111";
+                statusElemento.style.color = "#ff4444";
+                statusElemento.innerText = "Error de permisos en Firebase. Revisa tus Reglas.";
+                console.error(errorReglas);
+            });
+
+        } catch (errorArranque) {
+            document.getElementById('db-status').innerText = "Error crítico de configuración: " + errorArranque.message;
+        }
+
+        // Función del botón para copiar al portapapeles de los usuarios
         function copiarScript(id) {
             const codigo = document.getElementById(id).innerText;
             navigator.clipboard.writeText(codigo);
