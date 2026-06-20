@@ -214,7 +214,7 @@
             <p>&copy; 2026 DELTA HUB. Diseñado para la comunidad de Roblox.</p>
         </footer>
     </div>
-    <!-- NÚCLEO ASÍNCRONO DE CONTROL SUPABASE COMPATIBLE CON ARREGLOS -->
+    <!-- NÚCLEO ASÍNCRONO DE CONTROL SUPABASE CORREGIDO -->
     <script type="module">
         import { createClient } from 'https://jsdelivr.net';
 
@@ -245,9 +245,8 @@
                 if (error) return `Error de base de datos: ${error.message}`;
                 if (!data || data.length === 0) return "La llave introducida no existe o es inválida.";
 
-                // SOLUCIÓN PROFESIONAL: Se lee la propiedad mapeando el índice cero del array devuelto
-                const registroOriginal = data[0];
-                const fechaCreacion = new Date(registroOriginal.creado_en).getTime();
+                // EXTRAE LOS DATOS MAPEANDO EL ÍNDICE CERO DEL ARRAY CORRECTAMENTE
+                const fechaCreacion = new Date(data[0].creado_en).getTime();
                 const momentoActual = new Date().getTime();
                 const limiteVeinticuatroHoras = 24 * 60 * 60 * 1000;
 
