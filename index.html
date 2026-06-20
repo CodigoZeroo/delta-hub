@@ -216,9 +216,9 @@
     </div>
     <!-- NÚCLEO ASÍNCRONO DE CONTROL SUPABASE CORREGIDO -->
     <script type="module">
-        import { createClient } from 'https://jsdelivr.net';
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
 
-        const SUPABASE_URL = "https://supabase.co";
+        const SUPABASE_URL = "https://euxolslvpqsornicoeop.supabase.co/rest/v1/";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eG9sc2x2cHFzb3JuaWNvZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5MDkwODIsImV4cCI6MjA5NzQ4NTA4Mn0.xoGPgeRn1KXlnNFlIfPVgTNNhpTe0e7DqYi_Gd8Kgxg";
         
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
