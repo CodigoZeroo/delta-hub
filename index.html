@@ -103,8 +103,8 @@
         </div>
     </div>
 
-    <!-- CONTENIDO PROTEGIDO -->
-    <div id="contenido-protected" style="display: none;">
+    <!-- CONTENIDO PROTEGIDO (ID arreglado y unificado) -->
+    <div id="contenido-protegido" style="display: none;">
         <header>
             <div class="logo">PROSÍTIO</div>
             <nav>
@@ -134,7 +134,7 @@
                 <div class="project-card">
                     <div class="card-icon">📱</div>
                     <h3>App Móvil de Gestión</h3>
-                    <p>Interfaz intuitiva para iOS and Android enfocada en la productividad y experiencia de usuario.</p>
+                    <p>Interfaz intuitiva para iOS y Android enfocada en la productividad y experiencia de usuario.</p>
                     <a href="#" class="card-link">Explorar proyecto &rarr;</a>
                 </div>
                 <div class="project-card">
@@ -151,10 +151,12 @@
         </footer>
     </div>
 
-    <!-- LÓGICA DE VERIFICACIÓN Y TIEMPO (24 HORAS) -->
+    <!-- LÓGICA DE VERIFICACIÓN AUTOMÁTICA (24 HORAS) -->
     <script>
         const DISCORD_CLIENT_ID = '1517707106491306165'; 
-        const REDIRECT_URI = 'https://github.io';
+        
+        // Esta línea detecta tu dirección automáticamente sin importar las barras "/"
+        const REDIRECT_URI = window.location.origin + window.location.pathname;
 
         function verificarAcceso() {
             const horaAcceso = localStorage.getItem('llave_discord_tiempo');
@@ -162,8 +164,9 @@
             const veinticuatroHoras = 24 * 60 * 60 * 1000;
 
             if (horaAcceso && (ahora - horaAcceso < veinticuatroHoras)) {
+                // Oculta bloqueo y muestra el contenido real
                 document.getElementById('pantalla-bloqueo').style.display = 'none';
-                document.getElementById('contenido-protected').style.display = 'block';
+                document.getElementById('contenido-protegido').style.display = 'block';
             } else {
                 localStorage.removeItem('llave_discord_tiempo');
                 localStorage.removeItem('discord_access_token');
@@ -171,7 +174,6 @@
         }
 
         function procesarRetornoDiscord() {
-            // El fragmento busca los parámetros devueltos por Discord tras el #
             const fragmento = window.location.hash;
             if (fragmento) {
                 const parametros = new URLSearchParams(fragmento.substring(1));
@@ -181,7 +183,7 @@
                     localStorage.setItem('discord_access_token', accessToken);
                     localStorage.setItem('llave_discord_tiempo', new Date().getTime());
                     
-                    // Limpia la URL eliminando el token expuesto por seguridad
+                    // Limpia la URL de fragmentos extraños para dejarla limpia
                     window.history.replaceState({}, document.title, window.location.pathname);
                     verificarAcceso();
                 }
@@ -193,7 +195,7 @@
             verificarAcceso();
         };
 
-        // Redirección directa hacia la autorización oficial de Discord
+        // Evento del botón de inicio de sesión
         document.getElementById('btn-discord').onclick = function() {
             const urlDiscord = `https://discord.com{DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
             window.location.href = urlDiscord;
