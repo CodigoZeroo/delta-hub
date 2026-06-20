@@ -17,45 +17,71 @@ body {
 }
 
 /* ==========================================================================
-   2. MENÚ DE NAVEGACIÓN (BARRA SUPERIOR FLOTANTE)
+   2. MENÚ DE NAVEGACIÓN (BARRA SUPERIOR ANTIBUG / DESLIZABLE)
    ========================================================================== */
 header {
     display: flex;
+    flex-direction: row; /* Elementos en fila */
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 5%;
-    background-color: rgba(15, 23, 42, 0.65); 
-    backdrop-filter: blur(16px); /* Efecto vidrio esmerilado premium */
+    padding: 0.8rem 1.2rem; /* Compactado para teléfonos */
+    background-color: rgba(15, 23, 42, 0.75); 
+    backdrop-filter: blur(16px); 
     -webkit-backdrop-filter: blur(16px);
     position: fixed;
-    width: 90%; 
+    width: 92%; 
     max-width: 1200px;
-    top: 20px; /* Separado del borde superior para que flote */
+    top: 12px; /* Más pegado arriba para ganar espacio visual */
     left: 50%;
     transform: translateX(-50%); 
-    border-radius: 50px; /* Diseño en forma de cápsula */
+    border-radius: 50px; 
     border: 1px solid rgba(255, 255, 255, 0.05); 
     z-index: 100;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    gap: 10px;
 }
 
 header .logo {
     font-weight: 800;
-    font-size: 1.3rem;
-    letter-spacing: 3px;
-    background: linear-gradient(to right, #38bdf8, #06b6d4); /* Logotipo con degradado brillante */
+    font-size: 1.1rem; /* Ligeramente más pequeño para que no empuje el menú */
+    letter-spacing: 2px;
+    background: linear-gradient(to right, #38bdf8, #06b6d4); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    white-space: nowrap; /* Evita que el logo se parta en dos líneas */
+}
+
+/* El contenedor de los enlaces ahora es deslizable si se queda sin espacio */
+header nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto; /* Activa la barra deslizable horizontal */
+    white-space: nowrap; /* Fuerza a los enlaces a quedarse en una sola línea */
+    padding-bottom: 3px; /* Espacio para que la línea animada no se corte */
+    max-width: 70%; /* Ocupa el resto del ancho de la barra */
+    
+    /* Oculta la barra de scroll visualmente en Chrome/Safari/Edge para que se vea limpio */
+    -webkit-overflow-scrolling: touch; 
+}
+
+header nav::-webkit-scrollbar {
+    display: none; /* Oculta la barra gris fea de scroll */
+}
+
+header nav {
+    scrollbar-width: none; /* Oculta la barra en Firefox */
 }
 
 header nav a {
     color: #94a3b8;
     text-decoration: none;
-    margin-left: 2rem;
+    margin-left: 1.2rem; /* Margen reducido para evitar el bug en celulares */
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.85rem; /* Letras más compactas y legibles en móviles */
     position: relative;
     transition: color 0.3s ease;
+    display: inline-block;
 }
 
 header nav a:hover {
@@ -68,7 +94,7 @@ header nav a::after {
     position: absolute;
     width: 0;
     height: 2px;
-    bottom: -5px;
+    bottom: -3px;
     left: 0;
     background-color: #38bdf8;
     transition: width 0.3s ease;
@@ -79,14 +105,13 @@ header nav a:hover::after {
 }
 
 /* ==========================================================================
-   3. SECCIÓN PRINCIPAL (HERO) - AJUSTADA Y COMPACTA PARA MÓVILES
+   3. SECCIÓN PRINCIPAL (HERO)
    ========================================================================= */
 .hero {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Reducido significativamente: antes 12rem arriba y 8rem abajo */
     padding: 7rem 5% 3rem 5%; 
     margin-top: 10px;
     background: 
@@ -118,7 +143,7 @@ header nav a:hover::after {
 }
 
 .hero-content h1 {
-    font-size: 2.2rem; /* Más compacto para pantallas pequeñas (Antes 3.5rem) */
+    font-size: 2.2rem; 
     font-weight: 800;
     line-height: 1.2;
     margin-bottom: 1rem;
@@ -129,9 +154,9 @@ header nav a:hover::after {
 }
 
 .hero-content p {
-    font-size: 1rem; /* Más compacto y directo (Antes 1.2rem) */
+    font-size: 1rem; 
     color: #94a3b8;
-    margin-bottom: 1.8rem; /* Menor espacio antes del botón */
+    margin-bottom: 1.8rem; 
     line-height: 1.5;
     max-width: 550px;
     margin-left: auto;
@@ -145,7 +170,7 @@ header nav a:hover::after {
     display: inline-block;
     background: linear-gradient(135deg, #38bdf8, #06b6d4); 
     color: #0f172a;
-    padding: 0.8rem 2rem; /* Botón ligeramente más estilizado y menos gigante */
+    padding: 0.8rem 2rem; 
     border-radius: 50px;
     font-weight: 700;
     text-decoration: none;
@@ -163,16 +188,16 @@ header nav a:hover::after {
    5. SECCIÓN DE SCRIPTS (TARJETAS DE ROBLOX)
    ========================================================================== */
 .projects-section {
-    padding: 4rem 5%; /* Reducido espaciado general para acercar el contenido */
+    padding: 4rem 5%; 
     background-color: #0b1329; 
     text-align: center;
     border-top: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 .projects-section h2 {
-    font-size: 2rem; /* Un poco más pequeño y estilizado (Antes 2.5rem) */
+    font-size: 2rem; 
     font-weight: 800;
-    margin-bottom: 2.5rem; /* Reduce la separación con las tarjetas */
+    margin-bottom: 2.5rem; 
     position: relative;
     display: inline-block;
     color: #f8fafc;
@@ -192,14 +217,14 @@ header nav a:hover::after {
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem; /* Espacio más compacto entre cada tarjeta de script */
+    gap: 1.5rem; 
 }
 
 .project-card {
     background: rgba(30, 41, 59, 0.4); 
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    padding: 2rem 1.8rem; /* Compactada la tarjeta internamente */
+    padding: 2rem 1.8rem; 
     border-radius: 16px; 
     text-align: left;
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -214,7 +239,7 @@ header nav a:hover::after {
 }
 
 .card-icon {
-    font-size: 2.2rem; /* Iconos un poco más moderados */
+    font-size: 2.2rem; 
     margin-bottom: 1.2rem;
     display: inline-block;
     transition: transform 0.3s ease;
