@@ -79,138 +79,193 @@ header nav a:hover::after {
 }
 
 /* ==========================================================================
-   3. SECCIÓN PRINCIPAL (HERO)
-   ========================================================================== */
+   3. SECCIÓN PRINCIPAL (HERO) - IMPACTO VISUAL PREMIUM
+   ========================================================================= */
 .hero {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8rem 10% 4rem 10%; 
+    padding: 10rem 10% 6rem 10%; 
     margin-top: 40px;
-    background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.08), transparent 40%);
+    /* Fondo con doble degradado para crear un efecto de luces de neón profundas */
+    background: 
+        radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.15), transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1), transparent 50%),
+        #0f172a;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Un destello de luz extra detrás del texto */
+.hero::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: #38bdf8;
+    filter: blur(150px);
+    opacity: 0.15;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
 }
 
 .hero-content {
     text-align: center;
-    max-width: 700px;
+    max-width: 800px;
+    z-index: 2; /* Por encima de las luces de fondo */
 }
 
 .hero-content h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(to right, #f8fafc, #94a3b8);
+    font-size: 3.8rem; /* Más grande y llamativo */
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.8rem;
+    letter-spacing: -1px;
+    /* Degradado de tres colores de texto ultra moderno */
+    background: linear-gradient(to right, #ffffff 30%, #38bdf8, #06b6d4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .hero-content p {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     color: #94a3b8;
-    margin-bottom: 2.5rem;
-    line-height: 1.6;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* ==========================================================================
-   4. BOTÓN ESTILIZADO PRINCIPAL
+   4. BOTÓN ESTILIZADO PRINCIPAL CON EFECTO GLOW
    ========================================================================== */
 .btn-primary {
     display: inline-block;
-    background-color: #38bdf8;
+    background: linear-gradient(135deg, #38bdf8, #06b6d4); /* Botón con degradado */
     color: #0f172a;
-    padding: 0.8rem 2rem;
+    padding: 1rem 2.5rem;
     border-radius: 50px;
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: none;
-    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 25px rgba(56, 189, 248, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-primary:hover {
-    transform: translateY(-3px);
-    background-color: #7dd3fc;
-    box-shadow: 0 6px 25px rgba(56, 189, 248, 0.5);
+    transform: translateY(-4px); /* Se eleva un poco más */
+    box-shadow: 0 12px 30px rgba(56, 189, 248, 0.6); /* El brillo se expande */
+    filter: brightness(1.1); /* Se ilumina ligeramente */
 }
 
+.btn-primary:active {
+    transform: translateY(-1px);
+}
 /* ==========================================================================
-   5. SECCIÓN DE PROYECTOS
+   5. SECCIÓN DE PROYECTOS - REDISEÑO PREMIUM FUTURISTA
    ========================================================================== */
 .projects-section {
-    padding: 6rem 10%;
-    background-color: #0b1329; 
+    padding: 8rem 10%;
+    background-color: #0b1329; /* Tono muy oscuro para crear contraste artificial */
     text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 .projects-section h2 {
-    font-size: 2.2rem;
-    margin-bottom: 4rem;
+    font-size: 2.6rem;
+    font-weight: 800;
+    margin-bottom: 5rem;
     position: relative;
     display: inline-block;
     color: #f8fafc;
+    letter-spacing: -0.5px;
 }
 
+/* Línea brillante debajo del título de la sección */
 .projects-section h2::after {
     content: '';
     position: absolute;
-    width: 50%;
-    height: 3px;
-    background-color: #38bdf8;
-    bottom: -12px;
-    left: 25%;
-    border-radius: 2px;
+    width: 60%;
+    height: 4px;
+    background: linear-gradient(to right, #38bdf8, #06b6d4);
+    bottom: -16px;
+    left: 20%;
+    border-radius: 10px;
 }
 
+/* Contenedor adaptativo */
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
 }
 
+/* Estilo avanzado para cada Tarjeta */
 .project-card {
-    background-color: #1e293b; 
-    padding: 2.5rem 2rem;
-    border-radius: 16px;
+    background: rgba(30, 41, 59, 0.4); /* Fondo semi-transparente elegante */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 3rem 2.2rem;
+    border-radius: 20px; /* Bordes más curvos y modernos */
     text-align: left;
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .project-card:hover {
-    transform: translateY(-10px); 
-    border-color: rgba(56, 189, 248, 0.3); 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transform: translateY(-12px); /* Se eleva de forma muy suave */
+    border-color: rgba(56, 189, 248, 0.4); /* El borde se enciende con luz de neón */
+    background: rgba(30, 41, 59, 0.7);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.1);
 }
 
+/* Iconos de las tarjetas con animación de salto */
 .card-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
+    font-size: 2.8rem;
+    margin-bottom: 1.8rem;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .card-icon {
+    transform: translateY(-5px) scale(1.1); /* El icono salta un poco al pasar el mouse */
 }
 
 .project-card h3 {
-    font-size: 1.4rem;
-    margin-bottom: 0.8rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
     color: #f8fafc;
 }
 
 .project-card p {
     color: #94a3b8;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: 2rem;
 }
 
 .card-link {
     color: #38bdf8;
     text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: letter-spacing 0.3s ease;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: inline-block;
+    transition: all 0.3s ease;
 }
 
+.card-link:hover {
+    color: #06b6d4;
+}
+
+/* Pequeña animación de desplazamiento en la flecha del enlace */
 .project-card:hover .card-link {
-    letter-spacing: 1px;
+    transform: translateX(5px);
 }
 
 /* ==========================================================================
@@ -218,15 +273,15 @@ header nav a:hover::after {
    ========================================================================== */
 footer {
     text-align: center;
-    padding: 2.5rem;
+    padding: 3rem;
     color: #64748b;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     background-color: #0b1329;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 /* ==========================================================================
-   7. PANTALLA DE BLOQUEO (DISEÑO PREMIUM CON ANIMACIONES)
+   7. PANTALLA DE BLOQUEO (SISTEMA DE LLAVE MANUAL)
    ========================================================================== */
 #pantalla-bloqueo {
     position: fixed;
@@ -265,7 +320,7 @@ footer {
     color: #94a3b8;
     font-size: 1rem;
     line-height: 1.6;
-    margin-bottom: 2rem;
+    margin-bottom: 24px;
 }
 
 .input-llave {
@@ -281,12 +336,12 @@ footer {
     box-sizing: border-box;
     letter-spacing: 2px;
     font-weight: 600;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición para encendido azul */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .input-llave:focus {
     outline: none;
-    border-color: #38bdf8; /* Al hacer clic se ilumina en azul celeste */
+    border-color: #38bdf8; 
     box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
 }
 
@@ -306,9 +361,9 @@ footer {
 }
 
 .btn-entrar:hover {
-    background-color: #7dd3fc; /* Se aclara suavemente al pasar el cursor */
+    background-color: #7dd3fc; 
     transform: scale(1.01);
-    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); /* Brilla más al pasar el mouse */
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); 
 }
 
 .btn-obtener {
@@ -328,7 +383,7 @@ footer {
 
 .btn-obtener:hover {
     background-color: #4752C4;
-    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4); /* Brilla más el botón de Discord */
+    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4); 
 }
 
 .error-msg {
