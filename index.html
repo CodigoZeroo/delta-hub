@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="style.css">
     
     <style>
-        /* Estilos profesionales para la pantalla de bloqueo */
+        /* Estilos profesionales para la pantalla de bloqueo con llave */
         #pantalla-bloqueo {
             position: fixed;
             top: 0;
@@ -46,19 +46,47 @@
             color: #94a3b8;
             font-size: 15px;
             line-height: 1.6;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
         }
-        .botones-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .input-llave {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            letter-spacing: 2px;
         }
-        .btn-comunidad {
-            background: #22c55e;
+        .input-llave:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        .btn-entrar {
+            width: 100%;
+            background: #3b82f6;
             color: white;
             border: none;
-            padding: 14px 28px;
+            padding: 14px;
             font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 16px;
+            transition: background 0.2s ease;
+        }
+        .btn-entrar:hover {
+            background: #2563eb;
+        }
+        .btn-obtener {
+            background: #5865F2;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 14px;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
@@ -66,40 +94,33 @@
             display: block;
             transition: background 0.2s ease;
         }
-        .btn-comunidad:hover {
-            background: #16a34a;
-        }
-        .btn-discord {
-            background: #5865F2;
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: block;
-            transition: background 0.2s ease;
-        }
-        .btn-discord:hover {
+        .btn-obtener:hover {
             background: #4752C4;
+        }
+        .error-msg {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA DE BLOQUEO -->
+    <!-- PANTALLA DE BLOQUEO CON LLAVE -->
     <div id="pantalla-bloqueo">
         <div class="bloqueo-card">
-            <h2>🔒 Acceso Restringido</h2>
-            <p>Para ingresar a este sitio profesional, debes formar parte de nuestra comunidad en Discord. El acceso otorgado tiene una validez de 24 horas.</p>
-            <div class="botones-container">
-                <!-- Paso 1: Tu enlace de invitación -->
-                <a href="https://discord.gg" target="_blank" class="btn-comunidad">1. Unirse al Discord</a>
-                
-                <!-- Paso 2: Enlace oficial corregido con RESPONSE_TYPE=TOKEN y tu REDIRECT_URI exacta -->
-                <a href="https://discord.com" class="btn-discord">2. Verificar y Entrar</a>
-            </div>
+            <h2>🔒 Contenido Restringido</h2>
+            <p>Introduce la llave de acceso válida por 24 horas para continuar hacia el sitio.</p>
+            
+            <input type="text" id="input-llave" class="input-llave" placeholder="PEGA LA LLAVE AQUÍ">
+            <div id="error-msg" class="error-msg">Llave incorrecta o vencida. Inténtalo de nuevo.</div>
+            
+            <button id="btn-entrar" class="btn-entrar">Verificar Llave</button>
+            
+            <!-- Tu enlace de invitación actual de Discord -->
+            <a href="https://discord.gg" target="_blank" class="btn-obtener">💬 Conseguir llave en Discord</a>
         </div>
     </div>
 
@@ -151,39 +172,47 @@
         </footer>
     </div>
 
-    <!-- LÓGICA DE VERIFICACIÓN AUTOMÁTICA -->
+    <!-- LÓGICA DE CONTROL DE LA LLAVE MANUAL -->
     <script>
-        function verificarAcceso() {
-            const horaAcceso = localStorage.getItem('llave_discord_tiempo');
-            const ahora = new Date().getTime();
-            const veinticuatroHoras = 24 * 60 * 60 * 1000;
+        // CONFIGURACIÓN: Escribe aquí la llave secreta que tus usuarios deben poner.
+        // Puedes cambiarla cuando quieras (por ejemplo, mañana pones 'DELTAXYZ')
+        const LLAVE_CORRECTA = 'DELTA2026'; 
 
-            if (horaAcceso && (ahora - horaAcceso < veinticuatroHoras)) {
+        function verificarAcceso() {
+            const horaAcceso = localStorage.getItem('llave_manual_tiempo');
+            const llaveGuardada = localStorage.getItem('llave_manual_texto');
+            const ahora = new Date().getTime();
+            const veinticuatroHoras = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+
+            // Si guardó una llave, coincide con la actual, y no han pasado 24 horas:
+            if (horaAcceso && llaveGuardada === LLAVE_CORRECTA && (ahora - horaAcceso < veinticuatroHoras)) {
                 document.getElementById('pantalla-bloqueo').style.display = 'none';
                 document.getElementById('contenido-protegido').style.display = 'block';
             } else {
-                localStorage.removeItem('llave_discord_tiempo');
-                localStorage.removeItem('discord_access_token');
+                // Si ya expiró o cambiaste la llave en el código, se borra el acceso
+                localStorage.removeItem('llave_manual_tiempo');
+                localStorage.removeItem('llave_manual_texto');
             }
         }
 
-        function procesarRetornoDiscord() {
-            const fragmento = window.location.hash;
-            if (fragmento) {
-                const parametros = new URLSearchParams(fragmento.substring(1));
-                const accessToken = parametros.get('access_token');
+        // Al hacer clic en verificar
+        document.getElementById('btn-entrar').onclick = function() {
+            const llaveIngresada = document.getElementById('input-llave').value.trim();
+            const errorElemento = document.getElementById('error-msg');
 
-                if (accessToken) {
-                    localStorage.setItem('discord_access_token', accessToken);
-                    localStorage.setItem('llave_discord_tiempo', new Date().getTime());
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                    verificarAcceso();
-                }
+            if (llaveIngresada === LLAVE_CORRECTA) {
+                errorElemento.style.display = 'none';
+                // Guardamos la llave y la hora actual en el navegador
+                localStorage.setItem('llave_manual_texto', llaveIngresada);
+                localStorage.setItem('llave_manual_tiempo', new Date().getTime());
+                verificarAcceso();
+            } else {
+                errorElemento.style.display = 'block';
             }
-        }
+        };
 
+        // Comprobación inicial al cargar la página
         window.onload = function() {
-            procesarRetornoDiscord();
             verificarAcceso();
         };
     </script>
