@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delta Scripts Roblox</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- CARGA INMEDIATA Y ULTRA-ESTABLE DESDE GOOGLE (MÉTODO CLÁSICO) -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
 </head>
 <body>
 
@@ -12,21 +16,17 @@
         <h1>Delta Scripts Hub</h1>
         <p>Tu catálogo de scripts para Roblox.</p>
         
-        <!-- Zona de control para ver qué pasa en vivo -->
+        <!-- Aquí se forzará la carga de los scripts -->
         <div id="contenedor-principal">
-            <div class="status" id="db-status">Iniciando sistema...</div>
+            <div class="status" id="db-status">Iniciando sistema seguro...</div>
         </div>
     </div>
 
-    <!-- NÚCLEO DE CONEXIÓN CON GOOGLE FIREBASE -->
-    <script type="module">
-        import { initializeApp } from "https://gstatic.com";
-        import { getFirestore, collection, getDocs } from "https://gstatic.com";
-
-        // Tus credenciales oficiales de deltascripts-1
-        const firebaseConfig = {
+    <script>
+        // Tus credenciales reales de deltascripts-1
+        var firebaseConfig = {
             apiKey: "AIzaSyCyxJWklgJAAMwmhSw9jF3CMsJXbF99CeA",
-            authDomain: "deltascripts-1.firebaseapp.com",
+            authDomain: "://firebaseapp.com",
             projectId: "deltascripts-1",
             storageBucket: "deltascripts-1.firebasestorage.app",
             messagingSenderId: "735316669110",
@@ -34,49 +34,42 @@
             measurementId: "G-90E1DSBCWY"
         };
 
+        // Forzar arranque del motor
         try {
-            // 1. Forzar encendido de Firebase
-            const app = initializeApp(firebaseConfig);
-            const db = getFirestore(app);
+            firebase.initializeApp(firebaseConfig);
+            var db = firebase.firestore();
             
-            document.getElementById('db-status').innerText = "Conectado. Buscando tu base de datos...";
+            document.getElementById('db-status').innerText = "Conectado. Descargando tus scripts...";
 
-            // 2. Intentar descargar tus datos
-            const cargarDatos = async () => {
-                try {
-                    const respuesta = await getDocs(collection(db, "scripts"));
-                    const contenedor = document.getElementById('contenedor-principal');
-                    
-                    if (respuesta.empty) {
-                        contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Conectado a Firebase, pero tu colección 'scripts' está vacía en el panel de Google.</div>";
-                        return;
-                    }
-
-                    // Si todo sale bien, limpia e imprime tu script
-                    contenedor.innerHTML = "";
-                    respuesta.forEach((doc) => {
-                        const item = doc.data();
-                        contenedor.innerHTML += `
-                            <div style="background: #161622; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #2a2a3a;">
-                                <h3 style="color: #00ff88; margin: 0 0 10px 0; font-size: 1.3rem;">${item.nombre || 'Script sin nombre'}</h3>
-                                <pre style="background: #000; color: #00ff88; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; border: 1px solid #111;"><code>${item.contenido || '-- Vacío'}</code></pre>
-                            </div>
-                        `;
-                    });
-
-                } catch (errorDatabase) {
-                    // Si las reglas fallan o Google bloquea el acceso
-                    document.getElementById('db-status').style.background = "#331111";
-                    document.getElementById('db-status').style.color = "#ff4444";
-                    document.getElementById('db-status').innerText = "Bloqueo de Google: " + errorDatabase.message;
+            // Leer la colección de scripts
+            db.collection("scripts").get().then(function(respuesta) {
+                var contenedor = document.getElementById('contenedor-principal');
+                
+                if (respuesta.empty) {
+                    contenedor.innerHTML = "<div class='status' style='background: #332200; color: #ffaa00;'>Conectado a Firebase, pero tu colección 'scripts' está vacía en el panel de Google.</div>";
+                    return;
                 }
-            };
 
-            cargarDatos();
+                // Dibujar scripts en la pantalla
+                contenedor.innerHTML = "";
+                respuesta.forEach(function(doc) {
+                    var item = doc.data();
+                    contenedor.innerHTML += `
+                        <div style="background: #161622; padding: 20px; border-radius: 8px; margin-top: 15px; text-align: left; border: 1px solid #2a2a3a;">
+                            <h3 style="color: #00ff88; margin: 0 0 10px 0; font-size: 1.3rem;">${item.nombre || 'Script sin nombre'}</h3>
+                            <pre style="background: #000; color: #00ff88; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; border: 1px solid #111;"><code>${item.contenido || '-- Vacío'}</code></pre>
+                        </div>
+                    `;
+                });
 
-        } catch (errorGeneral) {
-            // Si las llaves de arriba están mal puestas
-            document.getElementById('db-status').innerText = "Error crítico de inicio: " + errorGeneral.message;
+            }).catch(function(errorDeReglas) {
+                document.getElementById('db-status').style.background = "#331111";
+                document.getElementById('db-status').style.color = "#ff4444";
+                document.getElementById('db-status').innerText = "Error en reglas de Firebase: " + errorDeReglas.message;
+            });
+
+        } catch (errorDeArranque) {
+            document.getElementById('db-status').innerText = "Error al iniciar Google SDK: " + errorDeArranque.message;
         }
     </script>
 
